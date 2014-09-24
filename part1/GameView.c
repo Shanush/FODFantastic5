@@ -9,8 +9,9 @@
      
 struct gameView {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    int hello;
-    char bro;
+    int roundNumber;
+    PlayerID currentPlayer;
+    int score;
 };
      
 
@@ -19,7 +20,8 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     GameView gameView = malloc(sizeof(struct gameView));
-    gameView->hello = 42;
+    gameView->roundNumber = 0;
+    gameView->score = 0;
     return gameView;
 }
      
