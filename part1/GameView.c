@@ -10,7 +10,7 @@
 struct gameView {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     int hello;
-    int mate;
+    char bro;
 };
      
 
