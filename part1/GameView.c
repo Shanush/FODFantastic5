@@ -6,22 +6,41 @@
 #include "Game.h"
 #include "GameView.h"
 // #include "Map.h" ... if you decide to use the Map ADT
-     
+
+typedef struct player {
+    PlayerID id;
+    int health;
+    LocationID location;
+    LocationID *trail;   //of size 6 array
+} Player;
+
 struct gameView {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    int roundNumber;
+    Round roundNumber;
     PlayerID currentPlayer;
     int score;
+    Player *players;
 };
-     
 
 // Creates a new GameView to summarise the current state of the game
 GameView newGameView(char *pastPlays, PlayerMessage messages[])
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+    
+    //Initalising gameView
     GameView gameView = malloc(sizeof(struct gameView));
-    gameView->roundNumber = 0;
-    gameView->score = 0;
+    gameView->roundNumber = 0;  //STUB
+    gameView->currentPlayer = PLAYER_LORD_GODALMING; //STUB
+    gameView->score = GAME_START_SCORE; // STUB
+    gameView->players = calloc(NUM_PLAYERS, sizeof(struct player));
+    
+    //Initalising players array   STUB
+    for (int i = 0; i < NUM_PLAYERS; i++) {
+        gameView->players[i].id = i;
+        gameView->players[i].health = 0;
+        gameView->players[i].location = NOWHERE;
+        gameView->players[i].trail = calloc(TRAIL_SIZE, sizeof(LocationID));
+    }
+    
     return gameView;
 }
      
