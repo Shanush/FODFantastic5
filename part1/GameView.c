@@ -7,6 +7,8 @@
 #include "GameView.h"
 // #include "Map.h" ... if you decide to use the Map ADT
 
+#pragma mark - structs
+
 typedef struct player {
     PlayerID id;
     int health;
@@ -21,6 +23,8 @@ struct gameView {
     int score;
     Player *players;
 };
+
+#pragma mark - new & dispose
 
 // Creates a new GameView to summarise the current state of the game
 GameView newGameView(char *pastPlays, PlayerMessage messages[])
@@ -49,57 +53,63 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
 void disposeGameView(GameView toBeDeleted)
 {
     //COMPLETE THIS IMPLEMENTATION
+    free( toBeDeleted->players );
     free( toBeDeleted );
 }
 
-
 //// Functions to return simple information about the current state of the game
+#pragma mark - Current State Information
 
 // Get the current round
 Round getRound(GameView currentView)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return currentView->roundNumber;
 }
 
 // Get the id of current player - ie whose turn is it?
 PlayerID getCurrentPlayer(GameView currentView)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return currentView->currentPlayer;
 }
 
 // Get the current score
 int getScore(GameView currentView)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return currentView->score;
 }
 
 // Get the current health points for a given player
 int getHealth(GameView currentView, PlayerID player)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return currentView->players[player].health;
 }
 
 // Get the current location id of a given player
 LocationID getLocation(GameView currentView, PlayerID player)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return currentView->players[player].location;
 }
 
+
 //// Functions that return information about the history of the game
+#pragma mark - History Of Game
 
 // Fills the trail array with the location ids of the last 6 turns
 void getHistory(GameView currentView, PlayerID player,
                             LocationID trail[TRAIL_SIZE])
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+    for (int i = 0; i < TRAIL_SIZE; i++) {
+        trail[i] = currentView->players[player].trail[i];
+    }
 }
 
 //// Functions that query the map to find information about connectivity
+#pragma mark - Connectivity information
 
 // Returns an array of LocationIDs for all directly connected locations
 
