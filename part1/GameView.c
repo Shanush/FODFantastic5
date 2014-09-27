@@ -51,7 +51,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     }
     
     int turn = 0;
-    while (turn = 0 || pastPlays[turn-1] != 0) {
+    while (turn == 0 || pastPlays[turn-1] != 0) {
         
         
         
