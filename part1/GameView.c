@@ -33,6 +33,7 @@ struct gameView {
 // Creates a new GameView to summarise the current state of the game
 GameView newGameView(char *pastPlays, PlayerMessage messages[])
 {
+
     
     //Initalising gameView
     GameView gameView = malloc(sizeof(struct gameView));
@@ -50,7 +51,10 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     }
     
     int turn = 0;
-    while (pastPlays[turn] != '\0') {
+    while (turn = 0 || pastPlays[turn-1] != 0) {
+        
+        
+        
         printf("while loop - pastPlay[%d]\n", turn);
         switch (pastPlays[turn]) {
             case 'G':
@@ -114,6 +118,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
         
         
         
+        printf("turn is %d\n", turn);
         turn += TURN_SIZE;
         //gameView->roundNumber++;
     }
