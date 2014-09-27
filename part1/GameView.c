@@ -1,11 +1,14 @@
 // GameView.c ... GameView ADT implementation
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 #include "Globals.h"
 #include "Game.h"
 #include "GameView.h"
 // #include "Map.h" ... if you decide to use the Map ADT
+
+#define TURN_SIZE 8
 
 #pragma mark - structs
 
@@ -34,17 +37,92 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     //Initalising gameView
     GameView gameView = malloc(sizeof(struct gameView));
     gameView->roundNumber = 0;  //STUB
-    gameView->currentPlayer = PLAYER_LORD_GODALMING; //STUB
+    gameView->currentPlayer = -1; //STUB
     gameView->score = GAME_START_SCORE; // STUB
     gameView->players = calloc(NUM_PLAYERS, sizeof(struct player));
     
     //Initalising players array   STUB
     for (int i = 0; i < NUM_PLAYERS; i++) {
         gameView->players[i].id = i;
-        gameView->players[i].health = 0;
+        gameView->players[i].health =  (i != 4) ? GAME_START_HUNTER_LIFE_POINTS : GAME_START_BLOOD_POINTS;
         gameView->players[i].location = NOWHERE;
         gameView->players[i].trail = calloc(TRAIL_SIZE, sizeof(LocationID));
     }
+    
+    int turn = 0;
+    while (pastPlays[turn] != '\0') {
+        printf("while loop - pastPlay[%d]\n", turn);
+        switch (pastPlays[turn]) {
+            case 'G':
+                gameView->currentPlayer = PLAYER_LORD_GODALMING;
+                gameView->roundNumber++;
+                break;
+            case 'S':
+                gameView->currentPlayer = PLAYER_DR_SEWARD;
+                gameView->roundNumber++;
+                break;
+            case 'H':
+                gameView->currentPlayer = PLAYER_VAN_HELSING;
+                gameView->roundNumber++;
+                break;
+            case 'M':
+                gameView->currentPlayer = PLAYER_MINA_HARKER;
+                gameView->roundNumber++;
+                break;
+            case 'D':
+                gameView->currentPlayer = PLAYER_DRACULA;
+                gameView->roundNumber++;
+                break;
+            default:
+                break;
+            
+        }
+        
+        
+        char currentAbbrevLocation[3] = {pastPlays[turn+1], pastPlays[turn+2], '\0'};
+        printf("currentAbbrevLocaiton is %s\n", currentAbbrevLocation);
+        gameView->players[gameView->currentPlayer].location = abbrevToID(currentAbbrevLocation);
+        
+        
+        int action = turn+3;
+        
+        while (action % TURN_SIZE != 0) {
+            
+            if (gameView->currentPlayer != PLAYER_DRACULA) {
+                
+                switch (pastPlays[action]) {
+                    case  'T':
+                        gameView->players[gameView->currentPlayer].health -= LIFE_LOSS_TRAP_ENCOUNTER;
+                        //Remove trap from city
+                        break;
+                    case 'V':
+                        //Vampire removed from city
+                        break;
+                    case 'D':
+                        gameView->players[gameView->currentPlayer].health -= LIFE_LOSS_DRACULA_ENCOUNTER;
+                        gameView->players[PLAYER_DRACULA].health -= LIFE_LOSS_HUNTER_ENCOUNTER;
+                        break;
+                    default:
+                        break;
+                }
+                
+            } else {
+                //Something for dracula's actions
+            }
+            action++;
+        }
+        
+        
+        
+        turn += TURN_SIZE;
+        //gameView->roundNumber++;
+    }
+    
+    gameView->currentPlayer = (gameView->currentPlayer == 4) ? PLAYER_LORD_GODALMING : gameView->currentPlayer + 1;
+    printf("round number is %d\n", gameView->roundNumber);
+    gameView->roundNumber /= 5;
+    
+    printf("round number is %d\n", gameView->roundNumber);
     
     return gameView;
 }
@@ -95,6 +173,7 @@ int getHealth(GameView currentView, PlayerID player)
 LocationID getLocation(GameView currentView, PlayerID player)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+    printf("Location of %d is %d\n", player ,currentView->players[player].location);
     return currentView->players[player].location;
 }
 
