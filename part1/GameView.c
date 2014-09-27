@@ -9,6 +9,8 @@
 // #include "Map.h" ... if you decide to use the Map ADT
 
 #define TURN_SIZE 8
+#define TRUE 1
+#define FALSE 0
 
 #pragma mark - structs
 
@@ -127,7 +129,9 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     return gameView;
 }
      
-     
+
+// Valid 8 chars for gameview function
+
 // Frees all memory previously allocated for the GameView toBeDeleted
 void disposeGameView(GameView toBeDeleted)
 {
