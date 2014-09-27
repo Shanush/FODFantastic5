@@ -12,6 +12,7 @@
 typedef struct player {
     PlayerID id;
     int health;
+    int happyState;
     LocationID location;
     LocationID *trail;   //of size 6 array
 } Player;
