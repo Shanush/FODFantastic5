@@ -73,8 +73,6 @@ PlayerID getCurrentPlayer(GameView currentView)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     return currentView->currentPlayer;
-    // ok lets
-    // try this for fun!!!
 }
 
 // Get the current score
