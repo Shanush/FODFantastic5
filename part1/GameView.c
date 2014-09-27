@@ -82,6 +82,7 @@ int getScore(GameView currentView)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     //Random comment
+    //Random
     return currentView->score;
 }
 
