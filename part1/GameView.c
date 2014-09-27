@@ -79,6 +79,7 @@ PlayerID getCurrentPlayer(GameView currentView)
 int getScore(GameView currentView)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+    //Random comment
     return currentView->score;
 }
 
