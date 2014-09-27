@@ -12,6 +12,7 @@
 typedef struct player {
     PlayerID id;
     int health;
+    int happyState;
     LocationID location;
     LocationID *trail;   //of size 6 array
 } Player;
@@ -79,6 +80,7 @@ PlayerID getCurrentPlayer(GameView currentView)
 int getScore(GameView currentView)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+    //Random comment
     return currentView->score;
 }
 
