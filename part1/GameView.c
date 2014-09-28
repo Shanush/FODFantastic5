@@ -35,7 +35,10 @@ struct gameView {
 // Creates a new GameView to summarise the current state of the game
 GameView newGameView(char *pastPlays, PlayerMessage messages[])
 {
-
+    printf("Ad. Sea is %d\n",abbrevToID("AS"));
+    printf("Athens is %d\n",abbrevToID("AT"));
+    printf("Zagreb is %d\n",abbrevToID("ZA"));
+    printf("Zurich is %d\n",abbrevToID("ZU"));
     
     //Initalising gameView
     GameView gameView = malloc(sizeof(struct gameView));
@@ -53,9 +56,9 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     }
     
     int turn = 0;
-    while (turn = 0 || pastPlays[turn-1] != 0) {
-        
-        
+    while (pastPlays[turn] != 0 || (turn == 0 && pastPlays[turn] != 0)) {
+        //printf("turn = %d\n", turn);
+        //printf("pastPlays[turn] = %c\n", pastPlays[turn]);
         
         printf("while loop - pastPlay[%d]\n", turn);
         switch (pastPlays[turn]) {
@@ -84,9 +87,8 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
             
         }
         
-        
         char currentAbbrevLocation[3] = {pastPlays[turn+1], pastPlays[turn+2], '\0'};
-        printf("currentAbbrevLocaiton is %s\n", currentAbbrevLocation);
+        printf("currentAbbrevLocaiton is %s, %d\n", currentAbbrevLocation, abbrevToID(currentAbbrevLocation));
         gameView->players[gameView->currentPlayer].location = abbrevToID(currentAbbrevLocation);
         
         
@@ -120,7 +122,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
         
         
         
-        printf("turn is %d\n", turn);
+        //printf("turn is %d\n", turn);
         turn += TURN_SIZE;
         //gameView->roundNumber++;
     }
@@ -182,7 +184,7 @@ int getHealth(GameView currentView, PlayerID player)
 LocationID getLocation(GameView currentView, PlayerID player)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    printf("Location of %d is %d\n", player ,currentView->players[player].location);
+    //printf("Location of %d is %d\n", player ,currentView->players[player].location);
     return currentView->players[player].location;
 }
 
