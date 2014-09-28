@@ -1,5 +1,5 @@
 // Places.c ... implementation of Places
-
+#include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
@@ -130,10 +130,10 @@ int abbrevToID(char *abbrev)
    // an attempt to optimise a linear search
    Place *p;
    Place *first = &places[MIN_MAP_LOCATION];
-   Place *last = &places[MAX_MAP_LOCATION];
+   Place *last = &places[MAX_MAP_LOCATION+1];
    for (p = first; p <= last; p++) {
-      char *c = p->abbrev;
-      if (c[0] == abbrev[0] && c[1] == abbrev[1] && c[2] == '\0') return p->id;
+       char *c = p->abbrev;
+       if (c[0] == abbrev[0] && c[1] == abbrev[1] && c[2] == '\0') return p->id;
    }
    return NOWHERE;
 }
