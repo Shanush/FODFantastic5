@@ -64,23 +64,18 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
         switch (pastPlays[turn]) {
             case 'G':
                 gameView->currentPlayer = PLAYER_LORD_GODALMING;
-                gameView->roundNumber++;
                 break;
             case 'S':
                 gameView->currentPlayer = PLAYER_DR_SEWARD;
-                gameView->roundNumber++;
                 break;
             case 'H':
                 gameView->currentPlayer = PLAYER_VAN_HELSING;
-                gameView->roundNumber++;
                 break;
             case 'M':
                 gameView->currentPlayer = PLAYER_MINA_HARKER;
-                gameView->roundNumber++;
                 break;
             case 'D':
                 gameView->currentPlayer = PLAYER_DRACULA;
-                gameView->roundNumber++;
                 break;
             default:
                 break;
@@ -124,7 +119,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
         
         //printf("turn is %d\n", turn);
         turn += TURN_SIZE;
-        //gameView->roundNumber++;
+        gameView->roundNumber++;
     }
     
     gameView->currentPlayer = (gameView->currentPlayer == 4) ? PLAYER_LORD_GODALMING : gameView->currentPlayer + 1;
