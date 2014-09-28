@@ -136,9 +136,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     return gameView;
 }
      
-
-// Valid 8 chars for gameview function
-
+     
 // Frees all memory previously allocated for the GameView toBeDeleted
 void disposeGameView(GameView toBeDeleted)
 {
