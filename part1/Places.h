@@ -62,8 +62,8 @@ typedef int LocationID;
 #define IONIAN_SEA              32
 #define IRISH_SEA               33
 #define KLAUSENBURG             34
-#define LEIPZIG                 35
-#define LE_HAVRE                36
+#define LE_HAVRE                35
+#define LEIPZIG                 36
 #define LISBON                  37
 #define LIVERPOOL               38
 #define LONDON                  39

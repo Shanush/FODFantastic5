@@ -1,5 +1,5 @@
 // Places.c ... implementation of Places
-#include <stdio.h>
+
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
@@ -18,7 +18,6 @@ typedef struct Place {
 // Last real place must be at index MAX_MAP_LOCATION
 static Place places[] =
 {
-   {"Nowhere", "NO", NOWHERE, UNKNOWN},
    {"Adriatic Sea", "AS", ADRIATIC_SEA, SEA},
    {"Alicante", "AL", ALICANTE, LAND},
    {"Amsterdam", "AM", AMSTERDAM, LAND},
@@ -54,8 +53,8 @@ static Place places[] =
    {"Ionian Sea", "IO", IONIAN_SEA, SEA},
    {"Irish Sea", "IR", IRISH_SEA, SEA},
    {"Klausenburg", "KL", KLAUSENBURG, LAND},
-   {"Leipzig", "LI", LEIPZIG, LAND},
    {"Le Havre", "LE", LE_HAVRE, LAND},
+   {"Leipzig", "LI", LEIPZIG, LAND},
    {"Lisbon", "LS", LISBON, LAND},
    {"Liverpool", "LV", LIVERPOOL, LAND},
    {"London", "LO", LONDON, LAND},
@@ -130,29 +129,10 @@ int abbrevToID(char *abbrev)
    // an attempt to optimise a linear search
    Place *p;
    Place *first = &places[MIN_MAP_LOCATION];
-   Place *last = &places[MAX_MAP_LOCATION+1];
+   Place *last = &places[MAX_MAP_LOCATION];
    for (p = first; p <= last; p++) {
-       char *c = p->abbrev;
-       if (c[0] == abbrev[0] && c[1] == abbrev[1] && c[2] == '\0') return p->id;
+      char *c = p->abbrev;
+      if (c[0] == abbrev[0] && c[1] == abbrev[1] && c[2] == '\0') return p->id;
    }
-//   if (!strcmp(abbrev,"C?")) {
-//      return CITY_UNKNOWN;
-//   } else if (!strcmp(abbrev,"S?")) {
-//      return SEA_UNKNOWN;
-//   } else if (!strcmp(abbrev,"HI")) {
-//      return HIDE;
-//   } else if (!strcmp(abbrev,"D1")) {
-//      return DOUBLE_BACK_1;
-//   } else if (!strcmp(abbrev,"D2")) {
-//      return DOUBLE_BACK_2;
-//   } else if (!strcmp(abbrev,"D3")) {
-//      return DOUBLE_BACK_3;
-//   } else if (!strcmp(abbrev,"D4")) {
-//      return DOUBLE_BACK_4;
-//   } else if (!strcmp(abbrev,"D5")) {
-//      return DOUBLE_BACK_5;
-//   } else if (!strcmp(abbrev,"TP")) {
-//      return TELEPORT;
-//   }
    return NOWHERE;
 }
