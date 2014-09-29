@@ -84,6 +84,24 @@ int main()
     printf("passed\n");
     disposeGameView(gv);
 
+    
+    //Test health when hunter goes to hospital
+    //   "The score decreases by 6 each time a Hunter is teleported to the hospital."
+    
+    
+    //Testing Scoring system:
+    //Test "The score decreases by 1 each time Dracula finishes a turn."
+    //Test "The score decreases by 13 each time a Vampire matures (ie falls off the trail)."
+    
+    
+    //Testing health points
+    //Dracula:
+    //  "Dracula loses 10 blood points each time he encounters a Hunter."
+    //  "Dracula loses 2 blood point if he is at sea at the end of his turn (he hates water!)"
+    //  "Dracula regains 10 blood points if he is in Castle Dracula at the end of his turn and has not
+    //     yet been defeated (even if he has been automagically teleported there - see Dracula's Turn below)"
+    //
+    
     printf("Test for connections\n");
     int size, seen[NUM_MAP_LOCATIONS], *edges;
     gv = newGameView("", messages1);    

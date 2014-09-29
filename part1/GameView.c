@@ -89,6 +89,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
                 break;
             case 'D':
                 gameView->currentPlayer = PLAYER_DRACULA;
+                gameView->score--; //"score decreases by 1 every time dracula finishes a turn"
                 break;
             default:
                 break;
@@ -111,6 +112,14 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
         //add new location
         currentPlayer->trail[0] = currentPlayer->location;
         
+        //updating score based on location
+        //Hunter in hospital - to full life points
+        
+        //Dracula at sea - loses 2 life points
+        if (currentPlayer->id == PLAYER_DRACULA &&
+            currentPlayer->location == SEA_UNKNOWN) {
+            currentPlayer->health -= LIFE_LOSS_SEA;
+        }
         
         //locate the first action of the turn in the string
         int action = turn+3;
@@ -141,6 +150,8 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
             }
             action++;
         }
+        
+        
         
         
         //update turn + roundNumber
