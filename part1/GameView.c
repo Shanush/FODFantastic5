@@ -39,10 +39,10 @@ LocationID abbrevToLocationID(char *abbrev);
 // Creates a new GameView to summarise the current state of the game
 GameView newGameView(char *pastPlays, PlayerMessage messages[])
 {
-    //printf("Ad. Sea is %d\n",abbrevToID("AS"));
-    //printf("Athens is %d\n",abbrevToID("AT"));
-    //printf("Zagreb is %d\n",abbrevToID("ZA"));
-    //printf("Zurich is %d\n",abbrevToID("ZU"));
+    ////printf("Ad. Sea is %d\n",abbrevToID("AS"));
+    ////printf("Athens is %d\n",abbrevToID("AT"));
+    ////printf("Zagreb is %d\n",abbrevToID("ZA"));
+    ////printf("Zurich is %d\n",abbrevToID("ZU"));
     
     //Initalising gameView
     GameView gameView = malloc(sizeof(struct gameView));
@@ -55,9 +55,13 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     for (int i = 0; i < NUM_PLAYERS; i++) {
         gameView->players[i].id = i;
         gameView->players[i].health =  (i != 4) ? GAME_START_HUNTER_LIFE_POINTS : GAME_START_BLOOD_POINTS;
-        gameView->players[i].location = NOWHERE;
-        gameView->players[i].trail = calloc(TRAIL_SIZE, sizeof(LocationID));
+        gameView->players[i].location = UNKNOWN_LOCATION;
+        gameView->players[i].trail = malloc(TRAIL_SIZE * sizeof(LocationID));
+        for (int j = 0; j < TRAIL_SIZE; j++) {
+            gameView->players[i].trail[j] = UNKNOWN_LOCATION;
+        }
     }
+    
     
     int turn = 0;
     while (turn < strlen(pastPlays)) {
@@ -93,15 +97,16 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
         
         //Set location for this currentPlayer.
         char currentAbbrevLocation[3] = {pastPlays[turn+1], pastPlays[turn+2], '\0'};
-        printf("currentAbbrevLocaiton is %s, %d\n", currentAbbrevLocation, abbrevToLocationID(currentAbbrevLocation));
+        ////printf("currentAbbrevLocaiton is %s, %d\n", currentAbbrevLocation, abbrevToLocationID(currentAbbrevLocation));
         gameView->players[gameView->currentPlayer].location = abbrevToLocationID(currentAbbrevLocation);
         
         //Update trail for currentPlayer
         //Shuffle current trail
-        for (int i = TRAIL_SIZE-1; i <= 1; i--) {
+        for (int i = TRAIL_SIZE-1; i >= 1; i--) {
             gameView->players[gameView->currentPlayer].trail[i] =
                 gameView->players[gameView->currentPlayer].trail[i-1];
         }
+        
         //add new location
         gameView->players[gameView->currentPlayer].trail[0] =
             gameView->players[gameView->currentPlayer].location;
@@ -222,6 +227,12 @@ void getHistory(GameView currentView, PlayerID player,
     for (int i = 0; i < TRAIL_SIZE; i++) {
         trail[i] = currentView->players[player].trail[i];
     }
+//    printf("\ttrail[0] = %d\n", trail[0]);
+//    printf("\ttrail[1] = %d\n", trail[1]);
+//    printf("\ttrail[2] = %d\n", trail[2]);
+//    printf("\ttrail[3] = %d\n", trail[3]);
+//    printf("\ttrail[4] = %d\n", trail[4]);
+//    printf("\ttrail[5] = %d\n", trail[5]);
 }
 
 //// Functions that query the map to find information about connectivity
