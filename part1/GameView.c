@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
 #include "Globals.h"
 #include "Game.h"
 #include "GameView.h"
@@ -35,10 +36,10 @@ struct gameView {
 // Creates a new GameView to summarise the current state of the game
 GameView newGameView(char *pastPlays, PlayerMessage messages[])
 {
-    printf("Ad. Sea is %d\n",abbrevToID("AS"));
-    printf("Athens is %d\n",abbrevToID("AT"));
-    printf("Zagreb is %d\n",abbrevToID("ZA"));
-    printf("Zurich is %d\n",abbrevToID("ZU"));
+    //printf("Ad. Sea is %d\n",abbrevToID("AS"));
+    //printf("Athens is %d\n",abbrevToID("AT"));
+    //printf("Zagreb is %d\n",abbrevToID("ZA"));
+    //printf("Zurich is %d\n",abbrevToID("ZU"));
     
     //Initalising gameView
     GameView gameView = malloc(sizeof(struct gameView));
@@ -56,11 +57,16 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     }
     
     int turn = 0;
-    while (pastPlays[turn] != 0 || (turn == 0 && pastPlays[turn] != 0)) {
-        //printf("turn = %d\n", turn);
-        //printf("pastPlays[turn] = %c\n", pastPlays[turn]);
+    while (turn < strlen(pastPlays)) {
+        ////while loop condition used to be:
+        //// pastPlays[turn] != 0 || (turn == 0 && pastPlays[turn] != 0)
         
-        printf("while loop - pastPlay[%d]\n", turn);
+        ////printf("turn = %d\n", turn);
+        ////printf("pastPlays[turn] = %c\n", pastPlays[turn]);
+        
+        ////printf("while loop - pastPlay[%d]\n", turn);
+        
+        //Set currentPlayer of turn
         switch (pastPlays[turn]) {
             case 'G':
                 gameView->currentPlayer = PLAYER_LORD_GODALMING;
@@ -82,13 +88,19 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
             
         }
         
+        //Set location for this currentPlayer.
         char currentAbbrevLocation[3] = {pastPlays[turn+1], pastPlays[turn+2], '\0'};
         printf("currentAbbrevLocaiton is %s, %d\n", currentAbbrevLocation, abbrevToID(currentAbbrevLocation));
         gameView->players[gameView->currentPlayer].location = abbrevToID(currentAbbrevLocation);
         
+        //Update trail for currentPlayer
+        //c  o   d   e    -   f   o   r   -  t   h  i  s
         
+        
+        //locate the first action of the turn in the string
         int action = turn+3;
         
+        //update health points, locations of traps extra based on action
         while (action % TURN_SIZE != 0) {
             
             if (gameView->currentPlayer != PLAYER_DRACULA) {
@@ -116,18 +128,26 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
         }
         
         
-        
-        //printf("turn is %d\n", turn);
+        //update turn + roundNumber
+        ////printf("turn is %d\n", turn);
         turn += TURN_SIZE;
         gameView->roundNumber++;
     }
     
-    gameView->currentPlayer = (gameView->currentPlayer == 4) ? PLAYER_LORD_GODALMING : gameView->currentPlayer + 1;
-    printf("round number is %d\n", gameView->roundNumber);
-    gameView->roundNumber /= 5;
+    //Set the currentPlayer to the next person after last player.
+    gameView->currentPlayer = (gameView->currentPlayer+1)%5; //increment currentPlayer to the next player.
+
+    ////gameView->currentPlayer = (gameView->currentPlayer == 4) ? PLAYER_LORD_GODALMING : gameView->currentPlayer + 1;
     
-    printf("round number is %d\n", gameView->roundNumber);
+    ////printf("round number is %d\n", gameView->roundNumber);
     
+    //RoundNumber was actually counting turn number
+    //so roundNumber is modified to have the actual round number
+    gameView->roundNumber = (gameView->roundNumber + 1) / 5;
+    
+    ////printf("round number is %d\n", gameView->roundNumber);
+    
+    //GameView is now ready to be used!
     return gameView;
 }
      
