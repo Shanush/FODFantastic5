@@ -135,24 +135,24 @@ int abbrevToID(char *abbrev)
        char *c = p->abbrev;
        if (c[0] == abbrev[0] && c[1] == abbrev[1] && c[2] == '\0') return p->id;
    }
-   if (!strcmp(abbrev,"C?")) {
-      return CITY_UNKNOWN;
-   } else if (!strcmp(abbrev,"S?")) {
-      return SEA_UNKNOWN;
-   } else if (!strcmp(abbrev,"HI")) {
-      return HIDE;
-   } else if (!strcmp(abbrev,"D1")) {
-      return DOUBLE_BACK_1;
-   } else if (!strcmp(abbrev,"D2")) {
-      return DOUBLE_BACK_2;
-   } else if (!strcmp(abbrev,"D3")) {
-      return DOUBLE_BACK_3;
-   } else if (!strcmp(abbrev,"D4")) {
-      return DOUBLE_BACK_4;
-   } else if (!strcmp(abbrev,"D5")) {
-      return DOUBLE_BACK_5;
-   } else if (!strcmp(abbrev,"TP")) {
-      return TELEPORT;
-   }
+//   if (!strcmp(abbrev,"C?")) {
+//      return CITY_UNKNOWN;
+//   } else if (!strcmp(abbrev,"S?")) {
+//      return SEA_UNKNOWN;
+//   } else if (!strcmp(abbrev,"HI")) {
+//      return HIDE;
+//   } else if (!strcmp(abbrev,"D1")) {
+//      return DOUBLE_BACK_1;
+//   } else if (!strcmp(abbrev,"D2")) {
+//      return DOUBLE_BACK_2;
+//   } else if (!strcmp(abbrev,"D3")) {
+//      return DOUBLE_BACK_3;
+//   } else if (!strcmp(abbrev,"D4")) {
+//      return DOUBLE_BACK_4;
+//   } else if (!strcmp(abbrev,"D5")) {
+//      return DOUBLE_BACK_5;
+//   } else if (!strcmp(abbrev,"TP")) {
+//      return TELEPORT;
+//   }
    return NOWHERE;
 }

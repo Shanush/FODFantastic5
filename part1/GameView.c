@@ -31,6 +31,9 @@ struct gameView {
     Player *players;
 };
 
+#pragma mark - Declaration of helper functiosn
+LocationID abbrevToLocationID(char *abbrev);
+
 #pragma mark - new & dispose
 
 // Creates a new GameView to summarise the current state of the game
@@ -90,11 +93,18 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
         
         //Set location for this currentPlayer.
         char currentAbbrevLocation[3] = {pastPlays[turn+1], pastPlays[turn+2], '\0'};
-        printf("currentAbbrevLocaiton is %s, %d\n", currentAbbrevLocation, abbrevToID(currentAbbrevLocation));
-        gameView->players[gameView->currentPlayer].location = abbrevToID(currentAbbrevLocation);
+        printf("currentAbbrevLocaiton is %s, %d\n", currentAbbrevLocation, abbrevToLocationID(currentAbbrevLocation));
+        gameView->players[gameView->currentPlayer].location = abbrevToLocationID(currentAbbrevLocation);
         
         //Update trail for currentPlayer
-        //c  o   d   e    -   f   o   r   -  t   h  i  s
+        //Shuffle current trail
+        for (int i = TRAIL_SIZE-1; i <= 1; i--) {
+            gameView->players[gameView->currentPlayer].trail[i] =
+                gameView->players[gameView->currentPlayer].trail[i-1];
+        }
+        //add new location
+        gameView->players[gameView->currentPlayer].trail[0] =
+            gameView->players[gameView->currentPlayer].location;
         
         
         //locate the first action of the turn in the string
@@ -225,4 +235,30 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     return NULL;
+}
+
+
+#pragma mark - Helper Functions
+LocationID abbrevToLocationID(char *abbrev) {
+    if (!strcmp(abbrev,"C?")) {
+        return CITY_UNKNOWN;
+    } else if (!strcmp(abbrev,"S?")) {
+        return SEA_UNKNOWN;
+    } else if (!strcmp(abbrev,"HI")) {
+        return HIDE;
+    } else if (!strcmp(abbrev,"D1")) {
+        return DOUBLE_BACK_1;
+    } else if (!strcmp(abbrev,"D2")) {
+        return DOUBLE_BACK_2;
+    } else if (!strcmp(abbrev,"D3")) {
+        return DOUBLE_BACK_3;
+    } else if (!strcmp(abbrev,"D4")) {
+        return DOUBLE_BACK_4;
+    } else if (!strcmp(abbrev,"D5")) {
+        return DOUBLE_BACK_5;
+    } else if (!strcmp(abbrev,"TP")) {
+        return TELEPORT;
+    } else {
+        return abbrevToID(abbrev);
+    }
 }
