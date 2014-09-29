@@ -9,17 +9,15 @@
 // #include "Map.h" ... if you decide to use the Map ADT
      
 struct dracView {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    int hello;
+    GameView gV;
 };
      
 
 // Creates a new DracView to summarise the current state of the game
 DracView newDracView(char *pastPlays, PlayerMessage messages[])
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     DracView dracView = malloc(sizeof(struct dracView));
-    dracView->hello = 42;
+    dracView->gv = newGameView(pastPlays, messages);
     return dracView;
 }
      
@@ -27,7 +25,8 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
 // Frees all memory previously allocated for the DracView toBeDeleted
 void disposeDracView(DracView toBeDeleted)
 {
-    //COMPLETE THIS IMPLEMENTATION
+
+    disposeGameView(toBeDeleted->gV);
     free( toBeDeleted );
 }
 
@@ -37,29 +36,26 @@ void disposeDracView(DracView toBeDeleted)
 // Get the current round
 Round giveMeTheRound(DracView currentView)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return getRound(currentView->gV);
 }
 
 // Get the current score
 int giveMeTheScore(DracView currentView)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return getScore(currentView->gV);
 }
 
 // Get the current health points for a given player
 int howHealthyIs(DracView currentView, PlayerID player)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return getHealth(currentView->gV, player);
 }
 
 // Get the current location id of a given player
 LocationID whereIs(DracView currentView, PlayerID player)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return getLocation(currentView->gV, player);
 }
 
 // Get the most recent move of a given player
@@ -84,7 +80,7 @@ void whatsThere(DracView currentView, LocationID where,
 void giveMeTheTrail(DracView currentView, PlayerID player,
                             LocationID trail[TRAIL_SIZE])
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+    getHistory(currentView->gV, player, trail);
 }
 
 //// Functions that query the map to find information about connectivity

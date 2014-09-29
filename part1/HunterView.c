@@ -10,7 +10,7 @@
      
 struct hunterView {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    int hello;
+    GameView gV;
 };
      
 
@@ -19,7 +19,7 @@ HunterView newHunterView(char *pastPlays, PlayerMessage messages[])
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     HunterView hunterView = malloc(sizeof(struct hunterView));
-    hunterView->hello = 42;
+    hunterView->gV = newGameView(pastPlays, messages);
     return hunterView;
 }
      
@@ -27,7 +27,7 @@ HunterView newHunterView(char *pastPlays, PlayerMessage messages[])
 // Frees all memory previously allocated for the HunterView toBeDeleted
 void disposeHunterView(HunterView toBeDeleted)
 {
-    //COMPLETE THIS IMPLEMENTATION
+    disposeGameView(toBeDeleted->gV);
     free( toBeDeleted );
 }
 
@@ -37,36 +37,31 @@ void disposeHunterView(HunterView toBeDeleted)
 // Get the current round
 Round giveMeTheRound(HunterView currentView)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return getRound(currentView->gV);
 }
 
 // Get the id of current player
 PlayerID whoAmI(HunterView currentView)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return getCurrentPlayer(currentView->gV);
 }
 
 // Get the current score
 int giveMeTheScore(HunterView currentView)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return getScore(currentView->gV);
 }
 
 // Get the current health points for a given player
 int howHealthyIs(HunterView currentView, PlayerID player)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return getHealth(currentView->gV, player);
 }
 
 // Get the current location id of a given player
 LocationID whereIs(HunterView currentView, PlayerID player)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return getLocation(currentView->gV, player);
 }
 
 //// Functions that return information about the history of the game
@@ -75,7 +70,7 @@ LocationID whereIs(HunterView currentView, PlayerID player)
 void giveMeTheTrail(HunterView currentView, PlayerID player,
                             LocationID trail[TRAIL_SIZE])
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+    getHistory(currentView->gV, player, trail);
 }
 
 //// Functions that query the map to find information about connectivity

@@ -95,21 +95,21 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
             
         }
         
+        Player *currentPlayer = &gameView->players[gameView->currentPlayer];
+        
         //Set location for this currentPlayer.
         char currentAbbrevLocation[3] = {pastPlays[turn+1], pastPlays[turn+2], '\0'};
         ////printf("currentAbbrevLocaiton is %s, %d\n", currentAbbrevLocation, abbrevToLocationID(currentAbbrevLocation));
-        gameView->players[gameView->currentPlayer].location = abbrevToLocationID(currentAbbrevLocation);
+        currentPlayer->location = abbrevToLocationID(currentAbbrevLocation);
         
         //Update trail for currentPlayer
         //Shuffle current trail
         for (int i = TRAIL_SIZE-1; i >= 1; i--) {
-            gameView->players[gameView->currentPlayer].trail[i] =
-                gameView->players[gameView->currentPlayer].trail[i-1];
+            currentPlayer->trail[i] = currentPlayer->trail[i-1];
         }
         
         //add new location
-        gameView->players[gameView->currentPlayer].trail[0] =
-            gameView->players[gameView->currentPlayer].location;
+        currentPlayer->trail[0] = currentPlayer->location;
         
         
         //locate the first action of the turn in the string
@@ -118,18 +118,18 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
         //update health points, locations of traps extra based on action
         while (action % TURN_SIZE != 0) {
             
-            if (gameView->currentPlayer != PLAYER_DRACULA) {
+            if (getCurrentPlayer(gameView) != PLAYER_DRACULA) {
                 
                 switch (pastPlays[action]) {
                     case  'T':
-                        gameView->players[gameView->currentPlayer].health -= LIFE_LOSS_TRAP_ENCOUNTER;
+                        currentPlayer->health -= LIFE_LOSS_TRAP_ENCOUNTER;
                         //Remove trap from city
                         break;
                     case 'V':
                         //Vampire removed from city
                         break;
                     case 'D':
-                        gameView->players[gameView->currentPlayer].health -= LIFE_LOSS_DRACULA_ENCOUNTER;
+                        currentPlayer->health -= LIFE_LOSS_DRACULA_ENCOUNTER;
                         gameView->players[PLAYER_DRACULA].health -= LIFE_LOSS_HUNTER_ENCOUNTER;
                         break;
                     default:
@@ -170,7 +170,6 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
 // Frees all memory previously allocated for the GameView toBeDeleted
 void disposeGameView(GameView toBeDeleted)
 {
-    //COMPLETE THIS IMPLEMENTATION
     free( toBeDeleted->players );
     free( toBeDeleted );
 }
@@ -181,38 +180,30 @@ void disposeGameView(GameView toBeDeleted)
 // Get the current round
 Round getRound(GameView currentView)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     return currentView->roundNumber;
 }
 
 // Get the id of current player - ie whose turn is it?
 PlayerID getCurrentPlayer(GameView currentView)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     return currentView->currentPlayer;
 }
 
 // Get the current score
 int getScore(GameView currentView)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    //Random comment
-    //Random
     return currentView->score;
 }
 
 // Get the current health points for a given player
 int getHealth(GameView currentView, PlayerID player)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     return currentView->players[player].health;
 }
 
 // Get the current location id of a given player
 LocationID getLocation(GameView currentView, PlayerID player)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    //printf("Location of %d is %d\n", player ,currentView->players[player].location);
     return currentView->players[player].location;
 }
 
