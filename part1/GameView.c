@@ -144,6 +144,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
             if (currentPlayer->health <= 0) {
                 updateLocationOfPlayer("JM", currentPlayer);
                 currentPlayer->health = GAME_START_HUNTER_LIFE_POINTS;
+                gameView->score -= 6;
             }
         }
         
