@@ -131,8 +131,9 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
                     default:
                         break;
                 }
+                action++;
             }
-            action++;
+           
         } else {
             // If vampire matured (not placed)
             if (pastPlays[action+4]== 'V') {

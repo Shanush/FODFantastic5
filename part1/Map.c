@@ -179,7 +179,7 @@ LocationID *connLocs (Map g, int *numLocations,
       }
    }
 
-   *numLocations;
+   *numLocations = 1;
 
    return connLocations;
 }
