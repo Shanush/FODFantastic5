@@ -111,18 +111,16 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
         int action = turn+3;
         
         //update health points, locations of traps extra based on action
-        while (action % TURN_SIZE != 0) {
-            
-            if (getCurrentPlayer(gameView) != PLAYER_DRACULA) {
-                
+        if (getCurrentPlayer(gameView) != PLAYER_DRACULA) {
+            while (action % TURN_SIZE != 0) {
                 switch (pastPlays[action]) {
                     case  'T':
                         currentPlayer->health -= LIFE_LOSS_TRAP_ENCOUNTER;
                         //Remove trap from city
                         break;
-                    case 'V':
+                    /*case 'V':
                         //Vampire removed from city
-                        break;
+                        break;*/
                     case 'D':
                         currentPlayer->health -= LIFE_LOSS_DRACULA_ENCOUNTER;
                         gameView->players[PLAYER_DRACULA].health -= LIFE_LOSS_HUNTER_ENCOUNTER;
@@ -130,11 +128,13 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
                     default:
                         break;
                 }
-                
-            } else {
-                //Something for dracula's actions
             }
             action++;
+        } else {
+            // If vampire matured (not placed)
+            if (pastPlays[action+4]== 'V') {
+                gameView->score -= 13;
+            }
         }
         
         
