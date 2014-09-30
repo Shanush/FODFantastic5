@@ -152,10 +152,39 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
         }
         
         
-        //Dracula at sea - loses 2 life points
-        if (currentPlayer->id == PLAYER_DRACULA &&
-            currentPlayer->location == SEA_UNKNOWN) {
-            currentPlayer->health -= LIFE_LOSS_SEA;
+        //Dracula at sea...
+        if (currentPlayer->id == PLAYER_DRACULA) {
+            int dropHealth = 0; //boolean to determine if we should deduct HP
+            int dB = 0;         //doubleBack, number used if a doubleback is present
+            //if he is in an inknown sea (hunter view)
+            if (currentPlayer->trail[0] == SEA_UNKNOWN) {
+                dropHealth = 1;
+            } else {
+                switch (currentPlayer->trail[0]) {
+                    case DOUBLE_BACK_1: dB = 1; break;
+                    case DOUBLE_BACK_2: dB = 2; break;
+                    case DOUBLE_BACK_3: dB = 3; break;
+                    case DOUBLE_BACK_4: dB = 4; break;
+                    case DOUBLE_BACK_5: dB = 5; break;
+                    default: break;
+                }
+                if (dB > 0) {
+                    if (currentPlayer->trail[dB] == SEA_UNKNOWN) {
+                        dropHealth = 1;
+                    } else if (idToType (currentPlayer->trail[dB]) == SEA) {
+                        dropHealth = 1;
+                    }
+                } else if (currentPlayer->trail[0] >= MIN_MAP_LOCATION &&
+                           currentPlayer->trail[0] <= MAX_MAP_LOCATION &&
+                           idToType (currentPlayer->trail[0]) == SEA) {
+                    //the most recently visited location is a sea...
+                    dropHealth = 1;
+                }
+            }
+
+            if (dropHealth) {
+                currentPlayer->health -= LIFE_LOSS_SEA;
+            }
         }
         
         //Hunter if rest
