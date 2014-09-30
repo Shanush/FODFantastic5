@@ -13,7 +13,7 @@
 #define TRUE 1
 #define FALSE 0
 
-#pragma mark - structs
+//Structs
 
 typedef struct player {
     PlayerID id;
@@ -21,20 +21,20 @@ typedef struct player {
     int happyState;
     LocationID location;
     LocationID *trail;   //of size 6 array
-} Player;
+} player;
 
 struct gameView {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     Round roundNumber;
     PlayerID currentPlayer;
     int score;
-    Player *players;
+    player *players;
 };
 
-#pragma mark - Declaration of helper functiosn
+//Declaration of helper functions
 LocationID abbrevToLocationID(char *abbrev);
-
-#pragma mark - new & dispose
+void updateLocationOfPlayer(char *abbrev, player *currentPlayer);
+//new & dispose
 
 // Creates a new GameView to summarise the current state of the game
 GameView newGameView(char *pastPlays, PlayerMessage messages[])
@@ -44,6 +44,8 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     ////printf("Zagreb is %d\n",abbrevToID("ZA"));
     ////printf("Zurich is %d\n",abbrevToID("ZU"));
     
+    int i,j; //Increment counters
+    
     //Initalising gameView
     GameView gameView = malloc(sizeof(struct gameView));
     gameView->roundNumber = 0;  //STUB
@@ -52,12 +54,12 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     gameView->players = calloc(NUM_PLAYERS, sizeof(struct player));
     
     //Initalising players array   STUB
-    for (int i = 0; i < NUM_PLAYERS; i++) {
+    for (i = 0; i < NUM_PLAYERS; i++) {
         gameView->players[i].id = i;
         gameView->players[i].health =  (i != 4) ? GAME_START_HUNTER_LIFE_POINTS : GAME_START_BLOOD_POINTS;
         gameView->players[i].location = UNKNOWN_LOCATION;
         gameView->players[i].trail = malloc(TRAIL_SIZE * sizeof(LocationID));
-        for (int j = 0; j < TRAIL_SIZE; j++) {
+        for (j = 0; j < TRAIL_SIZE; j++) {
             gameView->players[i].trail[j] = UNKNOWN_LOCATION;
         }
     }
@@ -96,30 +98,14 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
             
         }
         
-        Player *currentPlayer = &gameView->players[gameView->currentPlayer];
+        player *currentPlayer = &gameView->players[gameView->currentPlayer];
         
         //Set location for this currentPlayer.
-        char currentAbbrevLocation[3] = {pastPlays[turn+1], pastPlays[turn+2], '\0'};
-        ////printf("currentAbbrevLocaiton is %s, %d\n", currentAbbrevLocation, abbrevToLocationID(currentAbbrevLocation));
-        currentPlayer->location = abbrevToLocationID(currentAbbrevLocation);
-        
-        //Update trail for currentPlayer
-        //Shuffle current trail
-        for (int i = TRAIL_SIZE-1; i >= 1; i--) {
-            currentPlayer->trail[i] = currentPlayer->trail[i-1];
-        }
+        updateLocationOfPlayer(&pastPlays[turn+1], currentPlayer);
         
         //add new location
         currentPlayer->trail[0] = currentPlayer->location;
         
-        //updating score based on location
-        //Hunter in hospital - to full life points
-        
-        //Dracula at sea - loses 2 life points
-        if (currentPlayer->id == PLAYER_DRACULA &&
-            currentPlayer->location == SEA_UNKNOWN) {
-            currentPlayer->health -= LIFE_LOSS_SEA;
-        }
         
         //locate the first action of the turn in the string
         int action = turn+3;
@@ -152,7 +138,25 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
         }
         
         
+        //updating score based on location
+        //Hunter in hospital - to full life points
+        if (currentPlayer->id != PLAYER_DRACULA) {
+            if (currentPlayer->health <= 0) {
+                updateLocationOfPlayer("JM", currentPlayer);
+                currentPlayer->health = GAME_START_HUNTER_LIFE_POINTS;
+            }
+        }
         
+        
+        //Dracula at sea - loses 2 life points
+        if (currentPlayer->id == PLAYER_DRACULA &&
+            currentPlayer->location == SEA_UNKNOWN) {
+            currentPlayer->health -= LIFE_LOSS_SEA;
+        }
+        
+        //Hunter if rest
+        if (currentPlayer->id != PLAYER_DRACULA) {
+        }
         
         //update turn + roundNumber
         ////printf("turn is %d\n", turn);
@@ -186,7 +190,6 @@ void disposeGameView(GameView toBeDeleted)
 }
 
 //// Functions to return simple information about the current state of the game
-#pragma mark - Current State Information
 
 // Get the current round
 Round getRound(GameView currentView)
@@ -220,7 +223,6 @@ LocationID getLocation(GameView currentView, PlayerID player)
 
 
 //// Functions that return information about the history of the game
-#pragma mark - History Of Game
 
 // Fills the trail array with the location ids of the last 6 turns
 void getHistory(GameView currentView, PlayerID player,
@@ -238,7 +240,6 @@ void getHistory(GameView currentView, PlayerID player,
 }
 
 //// Functions that query the map to find information about connectivity
-#pragma mark - Connectivity information
 
 // Returns an array of LocationIDs for all directly connected locations
 
@@ -251,7 +252,7 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
 }
 
 
-#pragma mark - Helper Functions
+//Helper Functions
 LocationID abbrevToLocationID(char *abbrev) {
     if (!strcmp(abbrev,"C?")) {
         return CITY_UNKNOWN;
@@ -273,5 +274,18 @@ LocationID abbrevToLocationID(char *abbrev) {
         return TELEPORT;
     } else {
         return abbrevToID(abbrev);
+    }
+}
+
+void updateLocationOfPlayer(char *abbrev, player *currentPlayer) {
+    char currentAbbrevLocation[3] = {abbrev[0], abbrev[1], '\0'};
+    ////printf("currentAbbrevLocaiton is %s, %d\n", currentAbbrevLocation, abbrevToLocationID(currentAbbrevLocation));
+    currentPlayer->location = abbrevToLocationID(currentAbbrevLocation);
+    
+    //Update trail for currentPlayer
+    //Shuffle current trail
+    int i;
+    for (i = TRAIL_SIZE-1; i >= 1; i--) {
+        currentPlayer->trail[i] = currentPlayer->trail[i-1];
     }
 }
