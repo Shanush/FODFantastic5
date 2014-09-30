@@ -5,8 +5,10 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "GameView.h"
 #include "Map.h"
 #include "Places.h"
+#include "list.h"
 
 typedef struct vNode *VList;
 
@@ -21,6 +23,7 @@ struct MapRep {
    int   nE;         // #edges
    VList connections[NUM_MAP_LOCATIONS]; // array of lists
 };
+
 
 static void addConnections(Map);
 
@@ -132,6 +135,53 @@ int numE(Map g, TransportID type)
       }
     }
     return nE;
+}
+
+LocationID *connLocs (Map g, int *numLocations,
+                               LocationID from, PlayerID player, Round round,
+                               int road, int rail, int sea) 
+{
+   LocationID *connLocations = malloc(sizeof(LocationID)*99999);
+
+   int arrayPos = 0;
+   int possibleRailDist = 0; possibleRailDist = possibleRailDist;
+
+   VList curr = g->connections[from];  curr = curr;
+
+   /*
+   THINGS THAT NEEDED TO BE ACCOUNTED FOR:
+    -> rail work
+    -> account for count drac and castle drac
+    -> add 'from' to the array as well.
+   */
+
+   while (curr != NULL) {
+      if ((curr->type == ROAD) && (road == TRUE)) {
+         // valid connections exists for all to use
+         connLocations[arrayPos] = curr->v;
+         
+      } else if ((curr->type == RAIL) && (rail == TRUE) && (player != PLAYER_DRACULA)) {
+         // valid rail exists for hunters
+         // now calculate distances possible
+         // (roundNumber + hunterNumber) % 4
+         //  IF '0' : no train move allowed this turn
+         //  IF '1' : 1 train rail segment
+         //  IF '2' : 2 train rail segments
+         //  IF '3' : 3 train rail segments
+
+         possibleRailDist = (player + round) % 4;
+
+
+      } else if ((curr->type == BOAT) && (sea == TRUE)) {
+         // valid sea exists for all to use.
+         connLocations[arrayPos] = curr->v;
+         arrayPos++;
+      }
+   }
+
+   *numLocations;
+
+   return connLocations;
 }
 
 // Add edges to Graph representing map of Europe

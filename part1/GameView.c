@@ -7,7 +7,7 @@
 #include "Globals.h"
 #include "Game.h"
 #include "GameView.h"
-// #include "Map.h" ... if you decide to use the Map ADT
+#include "Map.h" //... if you decide to use the Map ADT
 
 #define TURN_SIZE 8
 #define TRUE 1
@@ -24,7 +24,7 @@ typedef struct player {
 } player;
 
 struct gameView {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+    Map europe;
     Round roundNumber;
     PlayerID currentPlayer;
     int score;
@@ -53,6 +53,9 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     gameView->score = GAME_START_SCORE; // STUB
     gameView->players = calloc(NUM_PLAYERS, sizeof(struct player));
     
+    //Initialising the map
+    gameView->europe = newMap();
+
     //Initalising players array   STUB
     for (i = 0; i < NUM_PLAYERS; i++) {
         gameView->players[i].id = i;
@@ -231,7 +234,8 @@ LocationID getLocation(GameView currentView, PlayerID player)
 void getHistory(GameView currentView, PlayerID player,
                             LocationID trail[TRAIL_SIZE])
 {
-    for (int i = 0; i < TRAIL_SIZE; i++) {
+    int i = 0;
+    for (i = 0; i < TRAIL_SIZE; i++) {
         trail[i] = currentView->players[player].trail[i];
     }
 //    printf("\ttrail[0] = %d\n", trail[0]);
@@ -250,8 +254,12 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
                                LocationID from, PlayerID player, Round round,
                                int road, int rail, int sea)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return NULL;
+    // use map in gameview
+    
+    // pass it onto Map.c
+    return connLocs(currentView->europe, numLocations,
+                               from, player, round,
+                               road, rail, sea);
 }
 
 
@@ -282,7 +290,7 @@ LocationID abbrevToLocationID(char *abbrev) {
 
 void updateLocationOfPlayer(char *abbrev, player *currentPlayer) {
     char currentAbbrevLocation[3] = {abbrev[0], abbrev[1], '\0'};
-    ////printf("currentAbbrevLocaiton is %s, %d\n", currentAbbrevLocation, abbrevToLocationID(currentAbbrevLocation));
+    //printf("currentAbbrevLocaiton is %s, %d\n", currentAbbrevLocation, abbrevToLocationID(currentAbbrevLocation));
     currentPlayer->location = abbrevToLocationID(currentAbbrevLocation);
     
     //Update trail for currentPlayer
