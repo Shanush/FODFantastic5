@@ -155,7 +155,9 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
         }
         
         //Hunter if rest
-        if (currentPlayer->id != PLAYER_DRACULA) {
+        if (currentPlayer->id != PLAYER_DRACULA &&
+            currentPlayer->trail[0] == currentPlayer->trail[1]) {
+            currentPlayer->health += LIFE_GAIN_REST;
         }
         
         //update turn + roundNumber

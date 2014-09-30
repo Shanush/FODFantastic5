@@ -87,6 +87,7 @@ int main()
     
     //Test health when hunter goes to hospital
     //   "The score decreases by 6 each time a Hunter is teleported to the hospital."
+    //Health gained when resting
     
     
     //Testing Scoring system:
