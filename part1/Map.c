@@ -8,7 +8,7 @@
 #include "GameView.h"
 #include "Map.h"
 #include "Places.h"
-#include "list.h"
+#include "List.h"
 
 typedef struct vNode *VList;
 
