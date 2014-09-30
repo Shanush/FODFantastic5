@@ -76,7 +76,7 @@ void giveMeTheTrail(HunterView currentView, PlayerID player,
 //// Functions that query the map to find information about connectivity
 
 // What are my possible next moves (locations)
-LocationID *whereCanIgo(HunterView currentView, int *numLocations, int road, int sea)
+LocationID *whereCanIgo(HunterView currentView, int *numLocations, int road, int rail, int sea)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     return NULL;
