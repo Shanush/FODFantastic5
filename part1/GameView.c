@@ -48,7 +48,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     
     //Initalising gameView
     GameView gameView = malloc(sizeof(struct gameView));
-    gameView->roundNumber = 0;  //STUB
+    gameView->roundNumber = -1;  //STUB
     gameView->currentPlayer = -1; //STUB
     gameView->score = GAME_START_SCORE; // STUB
     gameView->players = calloc(NUM_PLAYERS, sizeof(struct player));

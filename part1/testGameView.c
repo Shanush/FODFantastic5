@@ -103,6 +103,32 @@ int main()
     //     yet been defeated (even if he has been automagically teleported there - see Dracula's Turn below)"
     //
     
+    //Testing incomplete round
+    printf("Test for imcomplete round\n");
+    PlayerMessage messages50[] = {"Hello","Rubbish","Stuff","","Mwahahah"};
+    gv = newGameView("GST.... SAO.... HZU.... MBB....", messages50);
+    assert(getCurrentPlayer(gv) == PLAYER_DRACULA);
+    assert(getRound(gv) == 0);
+    assert(getLocation(gv,PLAYER_LORD_GODALMING) == STRASBOURG);
+    assert(getLocation(gv,PLAYER_DR_SEWARD) == ATLANTIC_OCEAN);
+    assert(getLocation(gv,PLAYER_VAN_HELSING) == ZURICH);
+    assert(getLocation(gv,PLAYER_MINA_HARKER) == BAY_OF_BISCAY);
+    printf("passed\n");
+    disposeGameView(gv);
+    
+    //Testing incomplete round
+    printf("Test for imcomplete round\n");
+    PlayerMessage messages50[] = {"Hello","Rubbish","Stuff","","Mwahahah"};
+    gv = newGameView("GST.... SAO.... HZU....", messages50);
+    assert(getCurrentPlayer(gv) == PLAYER_VAN_HELSING);
+    assert(getRound(gv) == 0);
+    assert(getLocation(gv,PLAYER_LORD_GODALMING) == STRASBOURG);
+    assert(getLocation(gv,PLAYER_DR_SEWARD) == ATLANTIC_OCEAN);
+    assert(getLocation(gv,PLAYER_VAN_HELSING) == ZURICH);
+    assert(getLocation(gv,PLAYER_MINA_HARKER) == BAY_OF_BISCAY);
+    printf("passed\n");
+    disposeGameView(gv);
+    
     printf("Test for connections\n");
     int size, seen[NUM_MAP_LOCATIONS], *edges;
     gv = newGameView("", messages1);    

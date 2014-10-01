@@ -164,20 +164,9 @@ LocationID *connLocs (Map g, int *numLocations,
             //connLocations[arrayPos] = curr->v;
             appendLocation(connLocationList, curr->v);
             
-        } else if ((curr->type == RAIL) && (rail == TRUE) && (player != PLAYER_DRACULA)) {
-            // valid rail exists for hunters
-            // now calculate distances possible
-            // (roundNumber + hunterNumber) % 4
-            //  IF '0' : no train move allowed this turn
-            //  IF '1' : 1 train rail segment
-            //  IF '2' : 2 train rail segments
-            //  IF '3' : 3 train rail segments
-//            int possibleRailDist = 0;
-//            
-//            possibleRailDist = (player + round) % 4;
-            
-            
-        } else if ((curr->type == BOAT) && (sea == TRUE)) {
+        }
+        
+        if ((curr->type == BOAT) && (sea == TRUE)) {
             // valid sea exists for all to use.
             //connLocations[arrayPos] = curr->v;
             // arrayPos++;
@@ -189,6 +178,13 @@ LocationID *connLocs (Map g, int *numLocations,
     }
     
     //Find rail
+    // valid rail exists for hunters
+    // now calculate distances possible
+    // (roundNumber + hunterNumber) % 4
+    //  IF '0' : no train move allowed this turn
+    //  IF '1' : 1 train rail segment
+    //  IF '2' : 2 train rail segments
+    //  IF '3' : 3 train rail segments
     if (player != PLAYER_DRACULA && rail == TRUE) {
         int possibleRailDist = (player + round) % 4;
         joinTwoList(connLocationList,
@@ -215,6 +211,7 @@ static List findRailConnections(Map g, LocationID from, int possibleRailDist) {
                             findRailConnections(g, curr->v, possibleRailDist-1));
                 
             }
+            curr = curr->next;
         }
         
         return railConnections;

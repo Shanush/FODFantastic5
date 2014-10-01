@@ -62,7 +62,10 @@ LocationID whereIs(DracView currentView, PlayerID player)
 void lastMove(DracView currentView, PlayerID player,
                  LocationID *start, LocationID *end)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+    LocationID *trailOfPlayer;
+    getHistory(currentView->gV, player, trailOfPlayer);
+    *start = trailOfPlayer[0];
+    *end = trailOfPlayer[1];
     return;
 }
 
