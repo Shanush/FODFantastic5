@@ -118,14 +118,13 @@ int main()
     
     //Testing incomplete round
     printf("Test for imcomplete round\n");
-    PlayerMessage messages50[] = {"Hello","Rubbish","Stuff","","Mwahahah"};
-    gv = newGameView("GST.... SAO.... HZU....", messages50);
-    assert(getCurrentPlayer(gv) == PLAYER_VAN_HELSING);
+    PlayerMessage messages60[] = {"Hello","Rubbish","Stuff","","Mwahahah"};
+    gv = newGameView("GST.... SAO.... HZU....", messages60);
+    assert(getCurrentPlayer(gv) == PLAYER_MINA_HARKER);
     assert(getRound(gv) == 0);
     assert(getLocation(gv,PLAYER_LORD_GODALMING) == STRASBOURG);
     assert(getLocation(gv,PLAYER_DR_SEWARD) == ATLANTIC_OCEAN);
     assert(getLocation(gv,PLAYER_VAN_HELSING) == ZURICH);
-    assert(getLocation(gv,PLAYER_MINA_HARKER) == BAY_OF_BISCAY);
     printf("passed\n");
     disposeGameView(gv);
     
