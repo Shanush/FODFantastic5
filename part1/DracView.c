@@ -17,7 +17,7 @@ struct dracView {
 DracView newDracView(char *pastPlays, PlayerMessage messages[])
 {
     DracView dracView = malloc(sizeof(struct dracView));
-    dracView->gv = newGameView(pastPlays, messages);
+    dracView->gV = newGameView(pastPlays, messages);
     return dracView;
 }
      
