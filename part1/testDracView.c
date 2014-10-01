@@ -108,6 +108,20 @@ int main()
     disposeDracView(dv);
 
     printf("passed\n");
+
+    // Test whatsThere ()
+    printf("Test whatsThere ()\n");
+    PlayerMessage messages1[] = {"Hello","Rubbish","Stuff",""};
+    dv = newDracView("GST.... SAO.... HZU.... MBB....", messages1);
+    assert(giveMeTheRound(dv) == 0);
+    assert(whereIs(dv,PLAYER_LORD_GODALMING) == STRASBOURG);
+    assert(whereIs(dv,PLAYER_DR_SEWARD) == ATLANTIC_OCEAN);
+    assert(whereIs(dv,PLAYER_VAN_HELSING) == ZURICH);
+    assert(whereIs(dv,PLAYER_MINA_HARKER) == BAY_OF_BISCAY);
+    assert(whereIs(dv,PLAYER_DRACULA) == UNKNOWN_LOCATION);
+    assert(howHealthyIs(dv,PLAYER_DRACULA) == GAME_START_BLOOD_POINTS);
+    printf("passed\n");
+    disposeDracView(dv);
     return 0;
 }
 
