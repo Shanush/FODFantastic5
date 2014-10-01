@@ -187,7 +187,6 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
                 currentPlayer->health -= LIFE_LOSS_SEA;
             }
         }
-        //IF YOU SEE THIS COMMENT THEN MAGIC HAPPENED!!
         
         //Hunter if rest
         if (currentPlayer->id != PLAYER_DRACULA &&

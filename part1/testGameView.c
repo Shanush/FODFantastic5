@@ -133,6 +133,9 @@ int main()
     gv = newGameView("", messages1);    
     printf("Checking Galatz road connections\n");
     edges = connectedLocations(gv,&size,GALATZ,PLAYER_LORD_GODALMING,0,1,0,0);
+    for (i = 0; i < size; i++) {
+        printf ("edges[%d] = %s\n", i, idToName (edges[i]));
+    }
     memset(seen, 0, NUM_MAP_LOCATIONS*sizeof(int));
     for (i = 0; i< size ; i++) seen[edges[i]] = 1;
     assert(size == 5); assert(seen[GALATZ]); assert(seen[CONSTANTA]);
@@ -151,6 +154,21 @@ int main()
     assert(size == 1);
     assert(edges[0] == ATHENS);
     free(edges);
+
+    printf ("Checking 3 max rail jumps, Paris start\n");
+    edges = connectedLocations(gv, &size, PARIS, PLAYER_LORD_GODALMING, 3,1,1,1);
+    for (i = 0; i < size; i++) {
+        printf ("edges[%d] = %s\n", i, idToName (edges[i]));
+    }
+    memset(seen, 0, NUM_MAP_LOCATIONS*sizeof(int));
+    for (i = 0; i < size; i++) seen[edges[i]] = 1;
+    assert (size == 14); assert(seen[PARIS]); assert(seen[BRUSSELS]); assert(seen[LE_HAVRE]);
+    assert(seen[NANTES]); assert(seen[CLERMONT_FERRAND]); assert(seen[GENEVA]);
+    assert(seen[STRASBOURG]); assert(seen[MARSEILLES]); assert (seen[BORDEAUX]);
+    assert (seen[SARAGOSSA]); assert (seen[BARCELONA]); assert (seen[MADRID]);
+    assert (seen[COLOGNE]); assert (seen[FRANKFURT]);
+    free(edges);
+
     printf("passed\n");
     disposeGameView(gv);
     return 0;

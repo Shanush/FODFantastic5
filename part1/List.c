@@ -45,9 +45,15 @@ void joinTwoList (List front, List back) {
     assert(front != NULL);
     
     if (back != NULL && back->first != NULL) {
-        front->last->next = back->first;
-        front->last = back->last;
-        front->numElements += back->numElements;
+        if (front->first == NULL) {
+            front->first = back->first;
+            front->last = back->last;
+            front->numElements += back->numElements;
+        } else {
+            front->last->next = back->first;
+            front->last = back->last;
+            front->numElements += back->numElements;
+        }
     }
     
     free(back);
