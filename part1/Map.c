@@ -26,6 +26,7 @@ struct MapRep {
 
 
 static void addConnections(Map);
+static List findRailConnections(Map g, LocationID from, int possibleRailDist);
 
 // Create a new empty graph (for a map)
 // #Vertices always same as NUM_PLACES
@@ -141,47 +142,88 @@ LocationID *connLocs (Map g, int *numLocations,
                                LocationID from, PlayerID player, Round round,
                                int road, int rail, int sea) 
 {
-   LocationID *connLocations = malloc(sizeof(LocationID)*99999);
+    List connLocationList = newlist();
+    
+    appendLocation(connLocationList, from);
+    
+    
+    //int arrayPos = 0;
+    
+    VList curr = g->connections[from];
+    
+    /*
+     THINGS THAT NEEDED TO BE ACCOUNTED FOR:
+     -> rail work
+     -> account for count drac and castle drac
+     -> add 'from' to the array as well.
+     */
+    
+    while (curr != NULL) {
+        if ((curr->type == ROAD) && (road == TRUE)) {
+            // valid connections exists for all to use
+            //connLocations[arrayPos] = curr->v;
+            appendLocation(connLocationList, curr->v);
+            
+        } else if ((curr->type == RAIL) && (rail == TRUE) && (player != PLAYER_DRACULA)) {
+            // valid rail exists for hunters
+            // now calculate distances possible
+            // (roundNumber + hunterNumber) % 4
+            //  IF '0' : no train move allowed this turn
+            //  IF '1' : 1 train rail segment
+            //  IF '2' : 2 train rail segments
+            //  IF '3' : 3 train rail segments
+//            int possibleRailDist = 0;
+//            
+//            possibleRailDist = (player + round) % 4;
+            
+            
+        } else if ((curr->type == BOAT) && (sea == TRUE)) {
+            // valid sea exists for all to use.
+            //connLocations[arrayPos] = curr->v;
+            // arrayPos++;
+            
+            appendLocation(connLocationList, curr->v);
+        }
+        
+        curr = curr->next;
+    }
+    
+    //Find rail
+    if (player != PLAYER_DRACULA && rail == TRUE) {
+        int possibleRailDist = (player + round) % 4;
+        joinTwoList(connLocationList,
+                    findRailConnections(g, from, possibleRailDist));
+    }
+    
+    LocationID *connLocations;
+    connLocations = convertListToArray(connLocationList, numLocations);
+    
+    return connLocations;
+}
 
-   int arrayPos = 0;
-   int possibleRailDist = 0; possibleRailDist = possibleRailDist;
-
-   VList curr = g->connections[from];  curr = curr;
-
-   /*
-   THINGS THAT NEEDED TO BE ACCOUNTED FOR:
-    -> rail work
-    -> account for count drac and castle drac
-    -> add 'from' to the array as well.
-   */
-
-   while (curr != NULL) {
-      if ((curr->type == ROAD) && (road == TRUE)) {
-         // valid connections exists for all to use
-         connLocations[arrayPos] = curr->v;
-         
-      } else if ((curr->type == RAIL) && (rail == TRUE) && (player != PLAYER_DRACULA)) {
-         // valid rail exists for hunters
-         // now calculate distances possible
-         // (roundNumber + hunterNumber) % 4
-         //  IF '0' : no train move allowed this turn
-         //  IF '1' : 1 train rail segment
-         //  IF '2' : 2 train rail segments
-         //  IF '3' : 3 train rail segments
-
-         possibleRailDist = (player + round) % 4;
-
-
-      } else if ((curr->type == BOAT) && (sea == TRUE)) {
-         // valid sea exists for all to use.
-         connLocations[arrayPos] = curr->v;
-         arrayPos++;
-      }
-   }
-
-   *numLocations = 1;
-
-   return connLocations;
+static List findRailConnections(Map g, LocationID from, int possibleRailDist) {
+    if (possibleRailDist > 0) {
+        
+        List railConnections = newlist();
+        
+        VList curr = g->connections[from];
+        
+        while (curr != NULL) {
+            if (curr->type == RAIL) {
+                appendLocation(railConnections, curr->v);
+                joinTwoList(railConnections,
+                            findRailConnections(g, curr->v, possibleRailDist-1));
+                
+            }
+        }
+        
+        return railConnections;
+        
+    } else {
+        
+        return NULL;
+        
+    }
 }
 
 // Add edges to Graph representing map of Europe

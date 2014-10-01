@@ -19,6 +19,8 @@ void joinTwoList (List front, List back);
 
 int numElements (List l);
 
+LocationID *convertListToArray(List l, int *numLocation);
+
 void deletelist(List l);
 
 #endif

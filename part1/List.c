@@ -42,10 +42,13 @@ void appendLocation (List l, LocationID location) {
 }
 
 void joinTwoList (List front, List back) {
-    assert(front != NULL && back != NULL);
+    assert(front != NULL);
     
-    front->last = back->first;
-    front->numElements += back->numElements;
+    if (back != NULL && back->first != NULL) {
+        front->last->next = back->first;
+        front->last = back->last;
+        front->numElements += back->numElements;
+    }
     
     free(back);
 }
@@ -54,6 +57,22 @@ int numElements (List l) {
     assert(l != NULL);
     
     return l->numElements;
+}
+
+LocationID *convertListToArray(List l, int *numLocation) {
+    
+    *numLocation = numElements(l);
+    
+    LocationID *array = malloc(sizeof(LocationID)*numElements(l));
+    
+    int i;
+    NodePointer curr;
+    
+    for (i = 0, curr = l->first; i < *numLocation && curr != NULL; i++, curr = curr->next) {
+        array[i] = curr->item;
+    }
+    
+    return array;
 }
 
 void deletelist(List l) {
