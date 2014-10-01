@@ -88,14 +88,17 @@ void giveMeTheTrail(DracView currentView, PlayerID player,
 // What are my (Dracula's) possible next moves (locations)
 LocationID *whereCanIgo(DracView currentView, int *numLocations, int road, int sea)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return NULL;
+    return connectedLocations(currentView->gV, numLocations,
+                              getLocation(currentView->gV, PLAYER_DRACULA),
+                              PLAYER_DRACULA, getRound(currentView->gV), road, FALSE, sea);
 }
 
 // What are the specified player's next possible moves
 LocationID *whereCanTheyGo(DracView currentView, int *numLocations,
                            PlayerID player, int road, int rail, int sea)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return NULL;
+
+    return connectedLocations(currentView->gV, numLocations,
+                              getLocation(currentView->gV, player),
+                              player, getRound(currentView->gV), road, rail, sea);
 }
