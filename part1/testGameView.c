@@ -103,6 +103,10 @@ int main()
     //     yet been defeated (even if he has been automagically teleported there - see Dracula's Turn below)"
     //
     
+    
+    //Hunter:
+    //Test that when person goes to Hospital, they don't magically regenerate health
+    
     //Testing incomplete round
     printf("Test for imcomplete round\n");
     PlayerMessage messages50[] = {"Hello","Rubbish","Stuff","","Mwahahah"};
