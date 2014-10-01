@@ -169,6 +169,55 @@ int main()
     assert (seen[COLOGNE]); assert (seen[FRANKFURT]);
     free(edges);
 
+    printf ("Checking 2 max rail jumps, Szeged start, Mina Harker\n");
+    edges = connectedLocations(gv, &size, SZEGED, PLAYER_MINA_HARKER, 7,1,1,1);
+    for (i = 0; i < size; i++) {
+        printf ("edges[%d] = %s\n", i, idToName (edges[i]));
+    }
+    memset(seen, 0, NUM_MAP_LOCATIONS*sizeof(int));
+    for (i = 0; i < size; i++) seen[edges[i]] = 1;
+    assert (size == 11); assert (seen[SZEGED]); assert (seen[KLAUSENBURG]); assert (seen[BUDAPEST]);
+    assert (seen[BELGRADE]); assert (seen[ST_JOSEPH_AND_ST_MARYS]);
+    assert (seen[ZAGREB]); assert (seen[VIENNA]); assert (seen[SOFIA]); assert (seen[BUCHAREST]);
+    assert (seen[GALATZ]); assert (seen[CONSTANTA]);
+    free(edges);
+
+    printf ("Checking 3 max rail jumps, London start, Van Helsing\n");
+    edges = connectedLocations(gv, &size, LONDON, PLAYER_VAN_HELSING, 5,1,1,1);
+    for (i = 0; i < size; i++) {
+        printf ("edges[%d] = %s\n", i, idToName (edges[i]));
+    }
+    memset(seen, 0, NUM_MAP_LOCATIONS*sizeof(int));
+    for (i = 0; i < size; i++) seen[edges[i]] = 1;
+    assert (size == 7); assert (seen[LONDON]); assert (seen[PLYMOUTH]); assert (seen[SWANSEA]);
+    assert (seen[MANCHESTER]); assert (seen[LIVERPOOL]); assert (seen[EDINBURGH]);
+    assert (seen[ENGLISH_CHANNEL]);
+    free(edges);    
+
+    printf ("Checking 1 max rail jump, Alicante start, Dr Seward\n");
+    edges = connectedLocations(gv, &size, ALICANTE, PLAYER_DR_SEWARD, 0,1,1,1);
+    for (i = 0; i < size; i++) {
+        printf ("edges[%d] = %s\n", i, idToName (edges[i]));
+    }
+    memset(seen, 0, NUM_MAP_LOCATIONS*sizeof(int));
+    for (i = 0; i < size; i++) seen[edges[i]] = 1;
+    assert (size == 6); assert (seen[ALICANTE]); assert (seen[SARAGOSSA]); assert (seen[MADRID]);
+    assert (seen[GRANADA]); assert (seen[MEDITERRANEAN_SEA]);
+    free(edges);  
+
+    printf ("Checking 1 max rail jump, Atlantic Ocean start, Dr Seward\n");
+    edges = connectedLocations(gv, &size, ATLANTIC_OCEAN, PLAYER_DR_SEWARD, 0,1,1,1);
+    for (i = 0; i < size; i++) {
+        printf ("edges[%d] = %s\n", i, idToName (edges[i]));
+    }
+    memset(seen, 0, NUM_MAP_LOCATIONS*sizeof(int));
+    for (i = 0; i < size; i++) seen[edges[i]] = 1;
+    assert (size == 9); assert (seen[ATLANTIC_OCEAN]); assert (seen[BAY_OF_BISCAY]);
+    assert (seen[ENGLISH_CHANNEL]); assert (seen[GALWAY]); assert (seen[LISBON]);
+    assert (seen[IRISH_SEA]); assert (seen[NORTH_SEA]); assert (seen[MEDITERRANEAN_SEA]);
+    assert (seen[CADIZ]);
+    free(edges);
+
     printf("passed\n");
     disposeGameView(gv);
     return 0;
