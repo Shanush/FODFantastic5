@@ -142,7 +142,7 @@ LocationID *connLocs (Map g, int *numLocations,
                                LocationID from, PlayerID player, Round round,
                                int road, int rail, int sea) 
 {
-    printf (">connLocs Called\n");
+    //printf (">connLocs Called\n");
     int visited[NUM_MAP_LOCATIONS] = {0};   
     List connLocationList = newlist();
     
@@ -162,13 +162,13 @@ LocationID *connLocs (Map g, int *numLocations,
      */
     
     while (curr != NULL) {
-        printf ("   >road list loop updated\n");
+        //printf ("   >road list loop updated\n");
         if ((curr->type == ROAD) && (road == TRUE) && visited[curr->v] == 0) {
             // valid connections exists for all to use
             //connLocations[arrayPos] = curr->v;
             appendLocation(connLocationList, curr->v);
             visited[curr->v] = 1;
-            printf ("      %s added to list as ROAD\n", idToName (curr->v));
+            //printf ("      %s added to list as ROAD\n", idToName (curr->v));
         }
         
         if ((curr->type == BOAT) && (sea == TRUE) && visited[curr->v] == 0) {
@@ -178,7 +178,7 @@ LocationID *connLocs (Map g, int *numLocations,
             
             appendLocation(connLocationList, curr->v);
             visited[curr->v] = 1;
-            printf ("      %s added to list as BOAT\n", idToName (curr->v));
+            //printf ("      %s added to list as BOAT\n", idToName (curr->v));
         }
         
         curr = curr->next;
@@ -205,7 +205,7 @@ LocationID *connLocs (Map g, int *numLocations,
 }
 
 static List findRailConnections(Map g, LocationID from, int possibleRailDist, int *visited) {
-    printf ("    >findRailConnections called\n");
+    //printf ("    >findRailConnections called\n");
     if (possibleRailDist > 0) {
         
         List railConnections = newlist();
@@ -218,7 +218,7 @@ static List findRailConnections(Map g, LocationID from, int possibleRailDist, in
                     appendLocation(railConnections, curr->v);
                     visited[curr->v] = 1;
                 }  
-                printf ("          %s added to list as RAIL\n", idToName (curr->v));
+                //printf ("          %s added to list as RAIL\n", idToName (curr->v));
                 joinTwoList(railConnections,
                             findRailConnections(g, curr->v, possibleRailDist-1, visited));
             }
