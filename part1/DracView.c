@@ -17,7 +17,8 @@ struct dracView {
     int traps[NUM_MAP_LOCATIONS];
     int vampire[NUM_MAP_LOCATIONS];
 };
-     
+
+LocationID findTrueLocation (char *pastPlays, int indexOfLocation);
 
 // Creates a new DracView to summarise the current state of the game
 DracView newDracView(char *pastPlays, PlayerMessage messages[])
@@ -96,7 +97,25 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
     
     return dracView;
 }
-     
+
+LocationID findTrueLocation (char *pastPlays, int indexOfLocation) {
+    char abbrev[3] = {pastPlays[indexOfLocation], pastPlays[indexOfLocation+1], '\0'};
+    
+    if (strcmp(abbrev, "HI") == 0 ||
+        strcmp(abbrev, "D1") == 0) {
+        return findTrueLocation(pastPlays, indexOfLocation-40);
+    } else if (strcmp(abbrev, "D2") == 0) {
+        return findTrueLocation(pastPlays, indexOfLocation-40*2);
+    } else if (strcmp(abbrev, "D3") == 0) {
+        return findTrueLocation(pastPlays, indexOfLocation-40*3);
+    } else if (strcmp(abbrev, "D4") == 0) {
+        return findTrueLocation(pastPlays, indexOfLocation-40*4);
+    } else if (strcmp(abbrev, "D5") == 0) {
+        return findTrueLocation(pastPlays, indexOfLocation-40*5);
+    } else {
+        return abbrevToID(abbrev);
+    }
+}
      
 // Frees all memory previously allocated for the DracView toBeDeleted
 void disposeDracView(DracView toBeDeleted)
