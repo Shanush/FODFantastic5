@@ -170,7 +170,7 @@ int main()
     // EXTRA TEST 1
     printf("extra test 1\n");
     PlayerMessage messages9[] = {"Hello","Rubbish","Stuff",""};
-    dv = newDracView("GVI.... SZU.... HBB.... MSO...." messages9);
+    dv = newDracView("GVI.... SZU.... HBB.... MSO....", messages9);
     assert(whereIs(dv, PLAYER_LORD_GODALMING) == VIENNA);
     assert(whereIs(dv, PLAYER_DR_SEWARD) == ZURICH);
     assert(whereIs(dv, PLAYER_VAN_HELSING) == BAY_OF_BISCAY);
@@ -185,9 +185,9 @@ int main()
     PlayerMessage messages10[] = {"Drop","party","at","Varrock"};
     dv = newDracView("GHA.... SMA.... HVR.... MBI.... DSZ.V.. "
                      "GCO.... SSR.... HSO.... MNP.... DZAT... "
-                     "GFR.... STO.... HBE.... MRO.... DVIT...", messages3);
-    assert(GiveMeTheRound(dv) == 3);
-    assert((giveMeTheScore(dv)) == (GAME_START_SCORE - (SCORE_LOSS_DRACULA_TURN*GiveMeTheRound(dv))));
+                     "GFR.... STO.... HBE.... MRO.... DVIT...", messages10);
+    assert(giveMeTheRound(dv) == 3);
+    assert((giveMeTheScore(dv)) == (GAME_START_SCORE - (SCORE_LOSS_DRACULA_TURN*giveMeTheRound(dv))));
     
     assert(whereIs(dv, PLAYER_LORD_GODALMING) == FRANKFURT);
     assert(whereIs(dv, PLAYER_DR_SEWARD) == TOULOUSE);
@@ -199,9 +199,9 @@ int main()
     whatsThere(dv,SZEGED,&numOfTraps,&numOfVamps);
     assert(numOfTraps == 0 && numOfVamps == 1);
     whatsThere(dv,ZAGREB,&numOfTraps,&numOfVamps);
-    assert(nT == 1 && nV == 0);
+    assert(numOfTraps == 1 && numOfVamps == 0);
     whatsThere(dv,VIENNA,&numOfTraps,&numOfVamps);
-    assert(nT == 1 && nV == 0);
+    assert(numOfTraps == 1 && numOfVamps == 0);
 
     assert(howHealthyIs(dv,PLAYER_DRACULA) == GAME_START_BLOOD_POINTS);
     disposeDracView(dv);
@@ -209,16 +209,16 @@ int main()
 
     // EXTRA TEST 3 - deleting traps once trail has passed
     printf("extra test 3!\n");
-    PlayerMessage messages10[] = {"Drop","party","at","Varrock"};
+    PlayerMessage messages11[] = {"Drop","party","at","Varrock"};
     dv = newDracView("GHA.... SMA.... HVR.... MBI.... DSZTV.. "
                      "GCO.... SSR.... HSO.... MNP.... DZAT... "
                      "GFR.... STO.... HBE.... MRO.... DVIT..."
                      "GCO.... SSR.... HSO.... MNP.... DPRT... "
                      "GHA.... SMA.... HVR.... MBI.... DNUT... "
                      "GFR.... STO.... HBE.... MRO.... DSTT..."
-                     "GHA.... SMA.... HVR.... MBI.... DPAT... ", messages3);
-    assert(GiveMeTheRound(dv) == 7);
-    assert((giveMeTheScore(dv)) == (GAME_START_SCORE - (SCORE_LOSS_DRACULA_TURN*GiveMeTheRound(dv))));
+                     "GHA.... SMA.... HVR.... MBI.... DPAT... ", messages11);
+    assert(giveMeTheRound(dv) == 7);
+    assert((giveMeTheScore(dv)) == (GAME_START_SCORE - (SCORE_LOSS_DRACULA_TURN*giveMeTheRound(dv))));
     
     assert(whereIs(dv, PLAYER_LORD_GODALMING) == HAMBURG);
     assert(whereIs(dv, PLAYER_DR_SEWARD) == MADRID);
@@ -226,7 +226,6 @@ int main()
     assert(whereIs(dv, PLAYER_MINA_HARKER) == BARI);
     assert(whereIs(dv, PLAYER_DRACULA) == PARIS);
     
-    int numOfTraps, numOfVamps;
     whatsThere(dv,SZEGED,&numOfTraps,&numOfVamps);
     assert(numOfTraps == 0 && numOfVamps == 1);
     whatsThere(dv,SZEGED,&numOfTraps,&numOfVamps);
