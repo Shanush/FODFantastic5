@@ -200,6 +200,9 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
                     case DOUBLE_BACK_5: dB = 5; break;
                     default: break;
                 }
+                if (currentPlayer->trail[dB] == HIDE) {
+                    dB++;
+                }
                 if (dB > 0) {
                     if (currentPlayer->trail[dB] == SEA_UNKNOWN) {
                         dropHealth = 1;

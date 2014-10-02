@@ -96,6 +96,7 @@ int main()
     assert(nT == 1 && nV == 0);
     whatsThere(dv,EDINBURGH,&nT,&nV);
     assert(nT == 2 && nV == 1);
+    printf("Our test right here\n");
     dv = newDracView("GGE.... SGE.... HGE.... MGE.... DED.V.. "
                      "GST.... SST.... HST.... MST.... DHIT... "
                      "GST.... SST.... HST.... MST.... DMNT... "
