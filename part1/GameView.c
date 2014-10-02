@@ -29,6 +29,8 @@ struct gameView {
     PlayerID currentPlayer;
     int score;
     player *players;
+    int traps[NUM_MAP_LOCATIONS];
+    int vampire[NUM_MAP_LOCATIONS];
 };
 
 //Declaration of helper functions
@@ -67,6 +69,14 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
         }
     }
     
+    //Initalising traps
+    for (i = 0; i < NUM_MAP_LOCATIONS; i++) {
+        gameView->traps[i] = 0;
+    }
+    //Initalising vampires
+    for (i = 0; i < NUM_MAP_LOCATIONS; i++) {
+        gameView->vampire[i] = 0;
+    }
     
     int turn = 0;
     while (turn < strlen(pastPlays)) {
@@ -103,6 +113,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
         
         player *currentPlayer = &gameView->players[gameView->currentPlayer];
         
+        
         //Set location for this currentPlayer.
         updateLocationOfPlayer(&pastPlays[turn+1], currentPlayer);
         
@@ -118,12 +129,13 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
             while (action % TURN_SIZE != 0) {
                 switch (pastPlays[action]) {
                     case  'T':
-                        currentPlayer->health -= LIFE_LOSS_TRAP_ENCOUNTER;
-                        //Remove trap from city
+                        currentPlayer->health -= LIFE_LOSS_TRAP_ENCOUNTER
+                                * gameView->traps[currentPlayer->location];
+                        gameView->traps[currentPlayer->location]--;
                         break;
-                    /*case 'V':
-                        //Vampire removed from city
-                        break;*/
+                    case 'V':
+                        gameView->vampire[currentPlayer->location]--;
+                        break;
                     case 'D':
                         currentPlayer->health -= LIFE_LOSS_DRACULA_ENCOUNTER;
                         gameView->players[PLAYER_DRACULA].health -= LIFE_LOSS_HUNTER_ENCOUNTER;
@@ -135,9 +147,25 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
             }
            
         } else {
+            
+            
+            if (pastPlays[action] == 'T') {
+                gameView->traps[currentPlayer->location]++;
+            }
+            
+            if (pastPlays[action+1] == 'V') {
+                gameView->vampire[currentPlayer->location]++;
+            }
+            
+            if (pastPlays[action+2] == 'M') {
+                gameView->traps[currentPlayer->location]--;
+            }
+            
             // If vampire matured (not placed)
-            if (pastPlays[action+4]== 'V') {
+            if (pastPlays[action+4]== 'V') {  //<- is action+4 correct?
                 gameView->score -= 13;
+                gameView->vampire[currentPlayer->location]--;
+                
             }
         }
         

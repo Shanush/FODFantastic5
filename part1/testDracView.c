@@ -111,8 +111,8 @@ int main()
 
     // Test whatsThere ()
     printf("Test whatsThere ()\n");
-    PlayerMessage messages1[] = {"Hello","Rubbish","Stuff",""};
-    dv = newDracView("GST.... SAO.... HZU.... MBB....", messages1);
+    PlayerMessage messages685[] = {"Hello","Rubbish","Stuff",""};
+    dv = newDracView("GST.... SAO.... HZU.... MBB....", messages685);
     assert(giveMeTheRound(dv) == 0);
     assert(whereIs(dv,PLAYER_LORD_GODALMING) == STRASBOURG);
     assert(whereIs(dv,PLAYER_DR_SEWARD) == ATLANTIC_OCEAN);

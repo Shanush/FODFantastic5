@@ -6,18 +6,94 @@
 #include "Game.h"
 #include "GameView.h"
 #include "DracView.h"
+#include "Places.h"
+#include <string.h>
 // #include "Map.h" ... if you decide to use the Map ADT
-     
+
+#define TURN_SIZE 8
+
 struct dracView {
     GameView gV;
+    int traps[NUM_MAP_LOCATIONS];
+    int vampire[NUM_MAP_LOCATIONS];
 };
      
 
 // Creates a new DracView to summarise the current state of the game
 DracView newDracView(char *pastPlays, PlayerMessage messages[])
 {
+    int i; //increment counters
+    
     DracView dracView = malloc(sizeof(struct dracView));
     dracView->gV = newGameView(pastPlays, messages);
+    
+    //Initalising traps
+    for (i = 0; i < NUM_MAP_LOCATIONS; i++) {
+        dracView->traps[i] = 0;
+    }
+    //Initalising vampires
+    for (i = 0; i < NUM_MAP_LOCATIONS; i++) {
+        dracView->vampire[i] = 0;
+    }
+    
+    int turn = 0;
+    
+    while (turn < strlen(pastPlays)) {
+        ////while loop condition used to be:
+        //// pastPlays[turn] != 0 || (turn == 0 && pastPlays[turn] != 0)
+        
+        ////printf("turn = %d\n", turn);
+        ////printf("pastPlays[turn] = %c\n", pastPlays[turn]);
+        
+        ////printf("while loop - pastPlay[%d]\n", turn);
+        
+        
+        //locate the first action of the turn in the string
+        int action = turn+3;
+        
+        char abbrev[3] = {pastPlays[turn+1], pastPlays[turn+2], '\0'};
+        
+        LocationID currentLocation = abbrevToID(abbrev);
+        
+        
+        //update health points, locations of traps extra based on action
+        if (pastPlays[turn] == 'D') {
+           if (pastPlays[action] == 'T') {
+               dracView->traps[currentLocation]++;
+            }
+            
+            if (pastPlays[action+1] == 'V') {
+                dracView->vampire[currentLocation]++;
+            }
+            
+            if (pastPlays[action+2] == 'M') {
+                dracView->traps[currentLocation]--;
+            }
+            
+            // If vampire matured (not placed)
+            if (pastPlays[action+4]== 'V') {  //<- is action+4 correct?
+                dracView->vampire[currentLocation]--;
+                
+            }
+        } else {
+            while (action % TURN_SIZE != 0) {
+                switch (pastPlays[action]) {
+                    case  'T':
+                        dracView->traps[currentLocation]--;
+                        break;
+                    case 'V':
+                        dracView->vampire[currentLocation]--;
+                        break;
+                    default:
+                        break;
+                }
+                action++;
+            }
+        }
+        turn += TURN_SIZE;
+    }
+
+    
     return dracView;
 }
      
@@ -73,7 +149,8 @@ void lastMove(DracView currentView, PlayerID player,
 void whatsThere(DracView currentView, LocationID where,
                          int *numTraps, int *numVamps)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+    *numTraps = currentView->traps[where];
+    *numVamps = currentView->vampire[where];
     return;
 }
 

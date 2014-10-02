@@ -106,6 +106,9 @@ int main()
     
     //Hunter:
     //Test that when person goes to Hospital, they don't magically regenerate health
+    //If there is more than one Trap at a location the Hunter encounters the Traps one
+    //  at a time until either the Hunter is reduced to 0 or less life points, or until all the Traps are
+    //  encountered, whichever occurs first.
     
     //Testing incomplete round
     printf("Test for imcomplete round\n");
