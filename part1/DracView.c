@@ -106,7 +106,7 @@ LocationID findTrueLocation (char *pastPlays, int indexOfLocation) {
     } else if (strcmp(abbrev, "D5") == 0) {
         return findTrueLocation(pastPlays, indexOfLocation-40*5);
     } else {
-        printf("name is %s\n", idToName(abbrevToID(abbrev)));
+        //printf("name is %s\n", idToName(abbrevToID(abbrev)));
         return abbrevToID(abbrev);
     }
 }
