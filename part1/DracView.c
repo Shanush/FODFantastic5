@@ -39,22 +39,15 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
     
     int turn = 0;
     
+    printf("before the while loop\n");
+    
     while (turn < strlen(pastPlays)) {
-        ////while loop condition used to be:
-        //// pastPlays[turn] != 0 || (turn == 0 && pastPlays[turn] != 0)
-        
-        ////printf("turn = %d\n", turn);
-        ////printf("pastPlays[turn] = %c\n", pastPlays[turn]);
-        
-        ////printf("while loop - pastPlay[%d]\n", turn);
-        
-        
         //locate the first action of the turn in the string
         int action = turn+3;
         
-        char abbrev[3] = {pastPlays[turn+1], pastPlays[turn+2], '\0'};
+        //char abbrev[3] = {pastPlays[turn+1], pastPlays[turn+2], '\0'};
         
-        LocationID currentLocation = abbrevToID(abbrev);
+        LocationID currentLocation = findTrueLocation(pastPlays, turn+1);
         
         //update health points, locations of traps extra based on action
         if (pastPlays[turn] == 'D') {
@@ -71,9 +64,8 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
             }
             
             // If vampire matured (not placed)
-            if (pastPlays[action+4]== 'V') {  //<- is action+4 correct?
+            if (pastPlays[action+2]== 'V') {
                 dracView->vampire[currentLocation]--;
-                
             }
         } else {
             while (action % TURN_SIZE != 0) {
@@ -99,9 +91,11 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
 
 LocationID findTrueLocation (char *pastPlays, int indexOfLocation) {
     char abbrev[3] = {pastPlays[indexOfLocation], pastPlays[indexOfLocation+1], '\0'};
+    printf("abbrev is %s\n", abbrev);
     
-    if (strcmp(abbrev, "HI") == 0 ||
-        strcmp(abbrev, "D1") == 0) {
+    if (strcmp(abbrev, "HI") == 0) {
+        return findTrueLocation(pastPlays, indexOfLocation-40);
+    } else if (strcmp(abbrev, "D1") == 0) {
         return findTrueLocation(pastPlays, indexOfLocation-40);
     } else if (strcmp(abbrev, "D2") == 0) {
         return findTrueLocation(pastPlays, indexOfLocation-40*2);
@@ -112,6 +106,7 @@ LocationID findTrueLocation (char *pastPlays, int indexOfLocation) {
     } else if (strcmp(abbrev, "D5") == 0) {
         return findTrueLocation(pastPlays, indexOfLocation-40*5);
     } else {
+        printf("name is %s\n", idToName(abbrevToID(abbrev)));
         return abbrevToID(abbrev);
     }
 }

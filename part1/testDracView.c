@@ -71,14 +71,47 @@ int main()
     assert(history[3] == UNKNOWN_LOCATION);
     printf("passed\n");
     disposeDracView(dv);
+    // needs further work - double back 2 not working
+    /*dv = newDracView("GGE.... SGE.... HGE.... MGE.... DED.V.. "
+                     "GST.... SST.... HST.... MST.... DHIT... "
+                     "GST.... SST.... HST.... MST.... DMNT... "
+                     "GST.... SST.... HST.... MST.... DD2T...", messages3);*/
     dv = newDracView("GGE.... SGE.... HGE.... MGE.... DED.V.. "
                      "GST.... SST.... HST.... MST.... DHIT... "
                      "GST.... SST.... HST.... MST.... DMNT... "
                      "GST.... SST.... HST.... MST.... DD1T...", messages3);
+    whatsThere(dv,EDINBURGH,&nT,&nV);
+    assert(nV == 1);
+    whatsThere(dv, MANCHESTER, &nT, &nV);
+    assert(nT == 2 && nV == 0);
+    whatsThere(dv,EDINBURGH,&nT,&nV);
+    assert(nT == 1 && nV == 1);
+    dv = newDracView("GGE.... SGE.... HGE.... MGE.... DED.V.. "
+                     "GST.... SST.... HST.... MST.... DHIT... "
+                     "GST.... SST.... HST.... MST.... DMNT... "
+                     "GST.... SST.... HST.... MST.... DD3T...", messages3);
+    whatsThere(dv,EDINBURGH,&nT,&nV);
+    assert(nV == 1);
     whatsThere(dv, MANCHESTER, &nT, &nV);
     assert(nT == 1 && nV == 0);
     whatsThere(dv,EDINBURGH,&nT,&nV);
     assert(nT == 2 && nV == 1);
+    dv = newDracView("GGE.... SGE.... HGE.... MGE.... DED.V.. "
+                     "GST.... SST.... HST.... MST.... DHIT... "
+                     "GST.... SST.... HST.... MST.... DMNT... "
+                     "GGE.... SGE.... HGE.... MGE.... DLVT... "
+                     "GST.... SST.... HST.... MST.... DD3T...", messages3);
+    printf("called the funciton\n");
+    whatsThere(dv,EDINBURGH,&nT,&nV);
+    assert(nV == 1);
+    printf("up to first ed\n");
+    whatsThere(dv, MANCHESTER, &nT, &nV);
+    assert(nT == 1 && nV == 0);
+    whatsThere(dv, LIVERPOOL, &nT, &nV);
+    assert(nT == 1 && nV == 0);
+    whatsThere(dv,EDINBURGH,&nT,&nV);
+    assert(nT == 2 && nV == 1);
+    printf("passed our tests\n");
     
     //-------------------------
     
