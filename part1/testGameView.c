@@ -83,17 +83,58 @@ int main()
     assert(getCurrentPlayer(gv) == 0);
     printf("passed\n");
     disposeGameView(gv);
+    
+    //------------------------------
 
     
-    //Test health when hunter goes to hospital
+    // TEST HUNTER HEALTH/SCORE STUFF
     //   "The score decreases by 6 each time a Hunter is teleported to the hospital."
-    //Health gained when resting
+    // Test that when person goes to Hospital, they don't magically regenerate health
     
+    printf("Hunter health\n");
+    PlayerMessage mess0[] = {"Hello","Rubbish","Stuff","","Mwahahah","Aha!","","","","Back I go"};
+    gv = newGameView("GGET... SGE.... HGE.... MGE.... DST.... "
+                     "GGET... SGE.... HGE.... MGE.... DST.... "
+                     "GGET... SGE.... HGE.... MGE.... DST.... "
+                     "GGET... SGE.... HGE.... MGE.... DST.... "
+                     "GGET... SGE.... HGE.... MGE.... DST.... "
+                     "GJM.... SGE.... HGE.... MGE.... DST....", mess0);
+    assert(getScore(gv) == GAME_START_SCORE - 6*SCORE_LOSS_DRACULA_TURN - SCORE_LOSS_HUNTER_HOSPITAL); // fail
+    assert(getHealth(gv, PLAYER_LORD_GODALMING) == 0); // fail
+
+    // Health gained when resting
+    gv = newGameView("GGET... SGE.... HGE.... MGE.... DST....", mess0);
+    assert(getScore(gv) == GAME_START_SCORE - SCORE_LOSS_DRACULA_TURN);
+    assert(getHealth(gv, PLAYER_LORD_GODALMING) == GAME_START_HUNTER_LIFE_POINTS - LIFE_LOSS_TRAP_ENCOUNTER); // fail
+    gv = newGameView("GGET... SGE.... HGE.... MGE.... DST.... "
+                     "GGE.... SGE.... HGE.... MGE.... DST....", mess0);
+    assert(getScore(gv) == GAME_START_SCORE - 2*SCORE_LOSS_DRACULA_TURN);
+    assert(getHealth(gv, PLAYER_LORD_GODALMING) == GAME_START_HUNTER_LIFE_POINTS - LIFE_LOSS_TRAP_ENCOUNTER + LIFE_GAIN_REST); // fail
     
-    //Testing Scoring system:
-    //Test "The score decreases by 1 each time Dracula finishes a turn."
+    // If there is more than one Trap at a location the Hunter encounters the Traps one
+    //  at a time until either the Hunter is reduced to 0 or less life points, or until all the Traps are
+    //  encountered, whichever occurs first.
+    gv = newGameView("GGETTT. SGE.... HGE.... MGE.... DST....", mess0);
+    assert(getHealth(gv, PLAYER_LORD_GODALMING) == GAME_START_HUNTER_LIFE_POINTS - 3*LIFE_LOSS_TRAP_ENCOUNTER);
+    gv = newGameView("GGE.... SGETT.. HGE.... MGE.... DST....", mess0);
+    assert(getHealth(gv, PLAYER_LORD_GODALMING) == GAME_START_HUNTER_LIFE_POINTS - 2*LIFE_LOSS_TRAP_ENCOUNTER);
+    
+            // WE'VE EDITED THE STRUCT -  can we do that? This test will only work with our program in that case
+            /*gv = newGameView("GGETTT. SGE.... HGE.... MGE.... DST.... "
+                             "GZUTTT. SGE.... HGE.... MGE....", mess0);
+            assert(getHealth(gv, PLAYER_LORD_GODALMING) == 0);
+            assert(gv->traps[70] == 1); // can't actually do due to abstraction*/
+    
+    printf("passed\n");
+    
+    //-------------------------------
+    
+    // TEST DRACULA STUFF:
+    // Test "The score decreases by 1 each time Dracula finishes a turn."
     printf("Score decrease when dracula finishes turn\n");
     PlayerMessage mess1[] = {"Hello","Rubbish","Stuff","","Mwahahah","Aha!","","","","Back I go"};
+    gv = newGameView("GGE.... SGE.... HGE.... MGE....", mess1);
+    assert(getScore(gv) == GAME_START_SCORE);
     gv = newGameView("GGE.... SGE.... HGE.... MGE.... DST....", mess1);
     assert(getScore(gv) == GAME_START_SCORE - SCORE_LOSS_DRACULA_TURN);
     printf("passed\n");
@@ -137,12 +178,7 @@ int main()
     assert(getHealth(gv, PLAYER_DRACULA) == GAME_START_BLOOD_POINTS + LIFE_GAIN_CASTLE_DRACULA); // -currently failing here- FIXED
     printf("passed\n");
     
-    
-    //Hunter:
-    //Test that when person goes to Hospital, they don't magically regenerate health
-    //If there is more than one Trap at a location the Hunter encounters the Traps one
-    //  at a time until either the Hunter is reduced to 0 or less life points, or until all the Traps are
-    //  encountered, whichever occurs first.
+    // ---------------------------------
     
     //Testing incomplete round
     printf("Test for imcomplete round\n");

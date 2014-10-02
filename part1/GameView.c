@@ -127,7 +127,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
                 switch (pastPlays[action]) {
                     case  'T':
                         currentPlayer->health -= LIFE_LOSS_TRAP_ENCOUNTER
-                                * gameView->traps[currentPlayer->location];
+                                * gameView->traps[currentPlayer->location]; // NOT WORKING PLZ FIX
                         gameView->traps[currentPlayer->location]--;
                         break;
                     case 'V':
