@@ -92,16 +92,50 @@ int main()
     
     //Testing Scoring system:
     //Test "The score decreases by 1 each time Dracula finishes a turn."
-    //Test "The score decreases by 13 each time a Vampire matures (ie falls off the trail)."
+    printf("Score decrease when dracula finishes turn\n");
+    PlayerMessage mess1[] = {"Hello","Rubbish","Stuff","","Mwahahah","Aha!","","","","Back I go"};
+    gv = newGameView("GGE.... SGE.... HGE.... MGE.... DST....", mess1);
+    assert(getScore(gv) == GAME_START_SCORE - SCORE_LOSS_DRACULA_TURN);
+    printf("passed\n");
     
+    //Test "The score decreases by 13 each time a Vampire matures (ie falls off the trail)."
+    printf("Score decrease when vampire matures\n");
+    PlayerMessage mess2[] = {"Hello","Rubbish","Stuff","","Mwahahah","Aha!","","","","Back I go"};
+    gv = newGameView("GGE.... SGE.... HGE.... MGE.... DST.V.. "
+                     "GGE.... SGE.... HGE.... MGE.... DST.... "
+                     "GGE.... SGE.... HGE.... MGE.... DST.... "
+                     "GGE.... SGE.... HGE.... MGE.... DST.... "
+                     "GGE.... SGE.... HGE.... MGE.... DST.... "
+                     "GGE.... SGE.... HGE.... MGE.... DST.... ", mess2);
+    assert(getScore(gv) == GAME_START_SCORE - 6*SCORE_LOSS_DRACULA_TURN);
+    gv = newGameView("GGE.... SGE.... HGE.... MGE.... DST.V.. "
+                     "GGE.... SGE.... HGE.... MGE.... DST.... "
+                     "GGE.... SGE.... HGE.... MGE.... DST.... "
+                     "GGE.... SGE.... HGE.... MGE.... DST.... "
+                     "GGE.... SGE.... HGE.... MGE.... DST.... "
+                     "GGE.... SGE.... HGE.... MGE.... DST.... "
+                     "GGE.... SGE.... HGE.... MGE.... DST..V. ", mess2);
+    assert(getScore(gv) == GAME_START_SCORE - 7*SCORE_LOSS_DRACULA_TURN - SCORE_LOSS_VAMPIRE_MATURES); // -currently failing here- FIXED
+    printf("passed\n");
     
     //Testing health points
     //Dracula:
     //  "Dracula loses 10 blood points each time he encounters a Hunter."
+    printf("Dracula blood points\n");
+    PlayerMessage mess3[] = {"Hello","Rubbish","Stuff","","Mwahahah","Aha!","","","","Back I go"};
+    gv = newGameView("GGE.... SZU.... HGE.... MGE.... DST.... "
+                     "GGE.... SSTD... HGE.... MGE.... DZU....", mess3);
+    assert(getHealth(gv, PLAYER_DRACULA) == GAME_START_BLOOD_POINTS - LIFE_LOSS_HUNTER_ENCOUNTER); // Only works if string includes Dracula as an encounter
+    
     //  "Dracula loses 2 blood point if he is at sea at the end of his turn (he hates water!)"
+    gv = newGameView("GGE.... SGE.... HGE.... MGE.... DEC....", mess3);
+    assert(getHealth(gv, PLAYER_DRACULA) == GAME_START_BLOOD_POINTS - LIFE_LOSS_SEA);
+    
     //  "Dracula regains 10 blood points if he is in Castle Dracula at the end of his turn and has not
     //     yet been defeated (even if he has been automagically teleported there - see Dracula's Turn below)"
-    //
+    gv = newGameView("GGE.... SST.... HGE.... MGE.... DCD....", mess3);
+    assert(getHealth(gv, PLAYER_DRACULA) == GAME_START_BLOOD_POINTS + LIFE_GAIN_CASTLE_DRACULA); // -currently failing here- FIXED
+    printf("passed\n");
     
     
     //Hunter:

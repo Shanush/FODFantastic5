@@ -81,12 +81,8 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     
     int turn = 0;
     while (turn < strlen(pastPlays)) {
-        ////while loop condition used to be:
-        //// pastPlays[turn] != 0 || (turn == 0 && pastPlays[turn] != 0)
-        
         ////printf("turn = %d\n", turn);
         ////printf("pastPlays[turn] = %c\n", pastPlays[turn]);
-        
         ////printf("while loop - pastPlay[%d]\n", turn);
         
         //Set currentPlayer of turn
@@ -148,7 +144,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
             }
            
         } else {
-            
+            //printf("%c %c %c %c\n", pastPlays[action], pastPlays[action+1], pastPlays[action+2], pastPlays[action+3]);
             
             if (pastPlays[action] == 'T') {
                 gameView->traps[currentPlayer->location]++;
@@ -163,7 +159,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
             }
             
             // If vampire matured (not placed)
-            if (pastPlays[action+4]== 'V') {  //<- is action+4 correct?
+            if (pastPlays[action+2]== 'V') {  //<- Is action+4 correct? NO: either a trap malfuncitons OR a vampire matures at [action+2]
                 gameView->score -= 13;
                 gameView->vampire[currentPlayer->location]--;
                 
@@ -186,7 +182,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
         if (currentPlayer->id == PLAYER_DRACULA) {
             int dropHealth = 0; //boolean to determine if we should deduct HP
             int dB = 0;         //doubleBack, number used if a doubleback is present
-            //if he is in an inknown sea (hunter view)
+            //if he is in an unknown sea (hunter view)
             if (currentPlayer->trail[0] == SEA_UNKNOWN) {
                 dropHealth = 1;
             } else {
@@ -214,6 +210,11 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
 
             if (dropHealth) {
                 currentPlayer->health -= LIFE_LOSS_SEA;
+            }
+            
+            // If at Castle Dracula at end of turn
+            if (currentPlayer->location == 17) {
+                currentPlayer->health +=10;
             }
         }
         
