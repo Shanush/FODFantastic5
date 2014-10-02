@@ -8,6 +8,7 @@
 #include "DracView.h"
 #include "Places.h"
 #include <string.h>
+#include <stdio.h>
 // #include "Map.h" ... if you decide to use the Map ADT
 
 #define TURN_SIZE 8
