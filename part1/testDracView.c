@@ -71,7 +71,17 @@ int main()
     assert(history[3] == UNKNOWN_LOCATION);
     printf("passed\n");
     disposeDracView(dv);
-
+    dv = newDracView("GGE.... SGE.... HGE.... MGE.... DED.V.. "
+                     "GST.... SST.... HST.... MST.... DHIT... "
+                     "GST.... SST.... HST.... MST.... DMNT... "
+                     "GST.... SST.... HST.... MST.... DD1T...", messages3);
+    whatsThere(dv, MANCHESTER, &nT, &nV);
+    assert(nT == 1 && nV == 0);
+    whatsThere(dv,EDINBURGH,&nT,&nV);
+    assert(nT == 2 && nV == 1);
+    
+    //-------------------------
+    
     printf("Test for connections\n");
     int size, seen[NUM_MAP_LOCATIONS], *edges;
 

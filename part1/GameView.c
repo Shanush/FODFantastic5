@@ -108,7 +108,12 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
             
         }
         
+        
         player *currentPlayer = &gameView->players[gameView->currentPlayer];
+        
+        if(currentPlayer->id != PLAYER_DRACULA && currentPlayer->health == 0) {
+            currentPlayer->health = GAME_START_HUNTER_LIFE_POINTS;
+        }
         
         
         //Set location for this currentPlayer.
@@ -127,7 +132,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
                 switch (pastPlays[action]) {
                     case  'T':
                         currentPlayer->health -= LIFE_LOSS_TRAP_ENCOUNTER
-                                * gameView->traps[currentPlayer->location]; // NOT WORKING PLZ FIX
+                                /* gameView->traps[currentPlayer->location]*/; // NOT WORKING PLZ FIX
                         gameView->traps[currentPlayer->location]--;
                         break;
                     case 'V':
@@ -166,17 +171,18 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
             }
         }
         
-        
+        //printf("Score is %d health of %d is %d", getScore(gameView), currentPlayer->id, currentPlayer->health);
         //updating score based on location
         //Hunter in hospital - to full life points
         if (currentPlayer->id != PLAYER_DRACULA) {
             if (currentPlayer->health <= 0) {
                 updateLocationOfPlayer("JM", currentPlayer);
-                currentPlayer->health = GAME_START_HUNTER_LIFE_POINTS;
-                gameView->score -= 6;
+                //currentPlayer->health = GAME_START_HUNTER_LIFE_POINTS;
+                currentPlayer->health = 0;
+                gameView->score -= SCORE_LOSS_HUNTER_HOSPITAL;
             }
         }
-        
+        //printf("\t Score is %d health of %d is %d\n", getScore(gameView), currentPlayer->id, currentPlayer->health);
         
         //Dracula at sea...
         if (currentPlayer->id == PLAYER_DRACULA) {
@@ -220,9 +226,13 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
         
         //Hunter if rest
         if (currentPlayer->id != PLAYER_DRACULA &&
-            currentPlayer->trail[0] == currentPlayer->trail[1]) {
+            currentPlayer->trail[0] == currentPlayer->trail[1] && currentPlayer->health != 0) {
             currentPlayer->health += LIFE_GAIN_REST;
         }
+        if (currentPlayer->health > 9 && currentPlayer->id != PLAYER_DRACULA) {
+            currentPlayer->health = 9;
+        }
+        //printf("Score is %d health of %d is %d\n", getScore(gameView), currentPlayer->id, currentPlayer->health);
         
         //update turn + roundNumber
         ////printf("turn is %d\n", turn);

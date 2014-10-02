@@ -94,22 +94,24 @@ int main()
     printf("Hunter health\n");
     PlayerMessage mess0[] = {"Hello","Rubbish","Stuff","","Mwahahah","Aha!","","","","Back I go"};
     gv = newGameView("GGET... SGE.... HGE.... MGE.... DST.... "
+                     "GPAT... SGE.... HGE.... MGE.... DST.... "
                      "GGET... SGE.... HGE.... MGE.... DST.... "
-                     "GGET... SGE.... HGE.... MGE.... DST.... "
-                     "GGET... SGE.... HGE.... MGE.... DST.... "
-                     "GGET... SGE.... HGE.... MGE.... DST.... "
-                     "GJM.... SGE.... HGE.... MGE.... DST....", mess0);
-    assert(getScore(gv) == GAME_START_SCORE - 6*SCORE_LOSS_DRACULA_TURN - SCORE_LOSS_HUNTER_HOSPITAL); // fail
-    assert(getHealth(gv, PLAYER_LORD_GODALMING) == 0); // fail
-
+                     "GPAT... SGE.... HGE.... MGE.... DST.... "
+                     "GGET... SGE.... HGE.... MGE.... DST....", mess0);
+    //printf("Score is %d\n",getScore(gv));
+    assert(getScore(gv) == GAME_START_SCORE - 5*SCORE_LOSS_DRACULA_TURN - SCORE_LOSS_HUNTER_HOSPITAL);
+    assert(getHealth(gv, PLAYER_LORD_GODALMING) == 0);
+    printf("passed\n");
+    
     // Health gained when resting
     gv = newGameView("GGET... SGE.... HGE.... MGE.... DST....", mess0);
     assert(getScore(gv) == GAME_START_SCORE - SCORE_LOSS_DRACULA_TURN);
-    assert(getHealth(gv, PLAYER_LORD_GODALMING) == GAME_START_HUNTER_LIFE_POINTS - LIFE_LOSS_TRAP_ENCOUNTER); // fail
+    assert(getHealth(gv, PLAYER_LORD_GODALMING) == GAME_START_HUNTER_LIFE_POINTS - LIFE_LOSS_TRAP_ENCOUNTER);
     gv = newGameView("GGET... SGE.... HGE.... MGE.... DST.... "
                      "GGE.... SGE.... HGE.... MGE.... DST....", mess0);
     assert(getScore(gv) == GAME_START_SCORE - 2*SCORE_LOSS_DRACULA_TURN);
-    assert(getHealth(gv, PLAYER_LORD_GODALMING) == GAME_START_HUNTER_LIFE_POINTS - LIFE_LOSS_TRAP_ENCOUNTER + LIFE_GAIN_REST); // fail
+    printf("health is %d\n", getHealth(gv, PLAYER_LORD_GODALMING));
+    assert(getHealth(gv, PLAYER_LORD_GODALMING) == GAME_START_HUNTER_LIFE_POINTS);
     
     // If there is more than one Trap at a location the Hunter encounters the Traps one
     //  at a time until either the Hunter is reduced to 0 or less life points, or until all the Traps are
@@ -117,14 +119,7 @@ int main()
     gv = newGameView("GGETTT. SGE.... HGE.... MGE.... DST....", mess0);
     assert(getHealth(gv, PLAYER_LORD_GODALMING) == GAME_START_HUNTER_LIFE_POINTS - 3*LIFE_LOSS_TRAP_ENCOUNTER);
     gv = newGameView("GGE.... SGETT.. HGE.... MGE.... DST....", mess0);
-    assert(getHealth(gv, PLAYER_LORD_GODALMING) == GAME_START_HUNTER_LIFE_POINTS - 2*LIFE_LOSS_TRAP_ENCOUNTER);
-    
-            // WE'VE EDITED THE STRUCT -  can we do that? This test will only work with our program in that case
-            /*gv = newGameView("GGETTT. SGE.... HGE.... MGE.... DST.... "
-                             "GZUTTT. SGE.... HGE.... MGE....", mess0);
-            assert(getHealth(gv, PLAYER_LORD_GODALMING) == 0);
-            assert(gv->traps[70] == 1); // can't actually do due to abstraction*/
-    
+    assert(getHealth(gv, PLAYER_DR_SEWARD) == GAME_START_HUNTER_LIFE_POINTS - 2*LIFE_LOSS_TRAP_ENCOUNTER);
     printf("passed\n");
     
     //-------------------------------
@@ -177,6 +172,18 @@ int main()
     gv = newGameView("GGE.... SST.... HGE.... MGE.... DCD....", mess3);
     assert(getHealth(gv, PLAYER_DRACULA) == GAME_START_BLOOD_POINTS + LIFE_GAIN_CASTLE_DRACULA); // -currently failing here- FIXED
     printf("passed\n");
+    
+    // Check double back, hide, etc for dracula
+    gv = newGameView("GGE.... SGE.... HGE.... MGE.... DED.V.. ", mess3);
+    assert(getLocation(gv, PLAYER_DRACULA) == abbrevToID("ED"));
+    gv = newGameView("GGE.... SGE.... HGE.... MGE.... DED.V.. "
+                     "GST.... SST.... HST.... MST.... DHIT... ", mess3);
+    assert(getLocation(gv, PLAYER_DRACULA) == HIDE);
+    gv = newGameView("GGE.... SGE.... HGE.... MGE.... DED.V.. "
+                     "GST.... SST.... HST.... MST.... DHIT... "
+                     "GST.... SST.... HST.... MST.... DMNT... "
+                     "GST.... SST.... HST.... MST.... DD1T...", mess3);
+    assert(getLocation(gv, PLAYER_DRACULA) == DOUBLE_BACK_1);
     
     // ---------------------------------
     

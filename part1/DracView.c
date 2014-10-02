@@ -17,12 +17,15 @@ struct dracView {
     int traps[NUM_MAP_LOCATIONS];
     int vampire[NUM_MAP_LOCATIONS];
 };
-     
+
+LocationID abbrevToLocationID(char *abbrev);
+LocationID trueLocation(LocationID dracHistory[], LocationID notReal, int prevStep);
 
 // Creates a new DracView to summarise the current state of the game
 DracView newDracView(char *pastPlays, PlayerMessage messages[])
 {
     int i; //increment counters
+    LocationID dracTrail[TRAIL_SIZE+1] = {UNKNOWN_LOCATION};
     
     DracView dracView = malloc(sizeof(struct dracView));
     dracView->gV = newGameView(pastPlays, messages);
@@ -53,8 +56,8 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
         
         char abbrev[3] = {pastPlays[turn+1], pastPlays[turn+2], '\0'};
         
-        LocationID currentLocation = abbrevToID(abbrev);
-        
+        LocationID currentLocation = abbrevToLocationID(abbrev);
+        currentLocation = trueLocation(dracTrail, currentLocation, 0);
         
         //update health points, locations of traps extra based on action
         if (pastPlays[turn] == 'D') {
@@ -75,6 +78,13 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
                 dracView->vampire[currentLocation]--;
                 
             }
+            
+            
+            for(int i = TRAIL_SIZE + 1; i > 0; i--) {
+                dracTrail[i] = dracTrail[i-1];
+            }
+            dracTrail[0] = currentLocation;
+            
         } else {
             while (action % TURN_SIZE != 0) {
                 switch (pastPlays[action]) {
@@ -96,8 +106,56 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
     
     return dracView;
 }
-     
-     
+
+LocationID abbrevToLocationID(char *abbrev) {
+    if (!strcmp(abbrev,"C?")) {
+        return CITY_UNKNOWN;
+    } else if (!strcmp(abbrev,"S?")) {
+        return SEA_UNKNOWN;
+    } else if (!strcmp(abbrev,"HI")) {
+        return HIDE;
+    } else if (!strcmp(abbrev,"D1")) {
+        return DOUBLE_BACK_1;
+    } else if (!strcmp(abbrev,"D2")) {
+        return DOUBLE_BACK_2;
+    } else if (!strcmp(abbrev,"D3")) {
+        return DOUBLE_BACK_3;
+    } else if (!strcmp(abbrev,"D4")) {
+        return DOUBLE_BACK_4;
+    } else if (!strcmp(abbrev,"D5")) {
+        return DOUBLE_BACK_5;
+    } else if (!strcmp(abbrev,"TP")) {
+        return TELEPORT;
+    } else {
+        return abbrevToID(abbrev);
+    }
+}
+
+LocationID trueLocation(LocationID dracHistory[], LocationID notReal, int prevStep) {
+    if(notReal == HIDE) {
+        notReal = dracHistory[1 + prevStep];
+        trueLocation(dracHistory, notReal, 1);
+    } else if (notReal == DOUBLE_BACK_1) {
+        notReal = dracHistory[1 + prevStep];
+        trueLocation(dracHistory, notReal, 1);
+    } else if (notReal == DOUBLE_BACK_2) {
+        notReal = dracHistory[2 + prevStep];
+        trueLocation(dracHistory, notReal, 1);
+    } else if (notReal == DOUBLE_BACK_3) {
+        notReal = dracHistory[3 + prevStep];
+        trueLocation(dracHistory, notReal, 1);
+    } else if (notReal == DOUBLE_BACK_4) {
+        notReal = dracHistory[4 + prevStep];
+        trueLocation(dracHistory, notReal, 1);
+    } else if (notReal == DOUBLE_BACK_5) {
+        notReal = dracHistory[5 + prevStep];
+        trueLocation(dracHistory, notReal, 1);
+    } else {
+        return notReal;
+    }
+    
+}
+    
 // Frees all memory previously allocated for the DracView toBeDeleted
 void disposeDracView(DracView toBeDeleted)
 {
