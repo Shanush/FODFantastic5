@@ -69,6 +69,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
         }
     }
     
+    
     //Initalising traps
     for (i = 0; i < NUM_MAP_LOCATIONS; i++) {
         gameView->traps[i] = 0;
@@ -249,6 +250,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
 // Frees all memory previously allocated for the GameView toBeDeleted
 void disposeGameView(GameView toBeDeleted)
 {
+    disposeMap(toBeDeleted->europe);
     free( toBeDeleted->players );
     free( toBeDeleted );
 }

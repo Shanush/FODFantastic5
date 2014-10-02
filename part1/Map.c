@@ -45,7 +45,7 @@ Map newMap()
 }
 
 // Remove an existing graph
-void destroyMap(Map g)
+void disposeMap(Map g)
 {
    int i;
    VList curr;
