@@ -318,7 +318,7 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
                                int road, int rail, int sea)
 {
     // use map in gameview
-    if(player == PLAYER_DRACULA) {
+    if(player != PLAYER_DRACULA) {
         printf("Player is %d, road is %d, rail is %d, sea is %d\n", player, road, rail, sea);
         printf("Start location is %d\n", from);
         printf("Start location is %s\n", idToName(from));

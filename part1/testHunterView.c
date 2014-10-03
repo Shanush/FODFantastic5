@@ -24,6 +24,7 @@
 #include <assert.h>
 #include <string.h>
 #include "HunterView.h"
+#include "GameView.h"
 
 int main()
 {
@@ -126,6 +127,24 @@ int main()
     disposeHunterView(hv);
 
     printf("passed\n");
+    
+    printf("Hunter health\n");
+    int numLocations;
+    PlayerMessage mess0[] = {"Hello","Rubbish","Stuff","","Mwahahah","Aha!","","","","Back I go"};
+    hv = newHunterView("GGET... SGE.... HGE.... MGE.... DST.... "
+                     "GPAT... SGE.... HGE.... MGE.... DST.... "
+                     "GGET... SGE.... HGE.... MGE.... DST.... "
+                     "GPAT... SGE.... HGE.... MGE.... DST.... "
+                     "GGET... SGE.... HGE.... MGE.... DST....", mess0);
+    //printf("Score is %d\n",getScore(gv));
+    assert(giveMeTheScore(hv) == GAME_START_SCORE - 5*SCORE_LOSS_DRACULA_TURN - SCORE_LOSS_HUNTER_HOSPITAL);
+    assert(howHealthyIs(hv, PLAYER_LORD_GODALMING) == 0);
+    LocationID *locations = whereCanIgo(hv, &numLocations, TRUE, FALSE, FALSE);
+    for (int i = numLocations-1; i >= 0; i--) {
+        printf("Location is %d, aka %s\n", locations[i], idToName(locations[i]));
+    }
+    printf("passed\n");
+    
     return 0;
 }
 
