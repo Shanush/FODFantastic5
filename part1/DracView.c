@@ -158,7 +158,9 @@ LocationID findTrueLocation (char *pastPlays, int indexOfLocation) {
                                 indexOfLocation-ROUND_SIZE*5);
         
     } else {
-        //printf("name is %s\n", idToName(abbrevToID(abbrev)));
+        
+        // Get the id from Abbrev
+        // If it wasn't one of the cases above - its a normal abbrev
         return abbrevToID(abbrev);
         
     }
