@@ -2,6 +2,25 @@
 // (a specialised version of the Map ADT)
 // You can change this as much as you want
 
+// Edited by the group:
+//  ╔═╗╔═╗╔╦╗╔═╗┌─┐┌┐┌┌┬┐┌─┐┌─┐┌┬┐┬┌─┐5
+//  ╠╣ ║ ║ ║║╠╣ ├─┤│││ │ ├─┤└─┐ │ ││
+//  ╚  ╚═╝═╩╝╚  ┴ ┴┘└┘ ┴ ┴ ┴└─┘ ┴ ┴└─┘
+// *** Starring ***
+//   +-+-+-+-+-+ +-+-+-+-+-+
+//   |R|u|c|h|i| |G|u|p|t|a|
+//   +-+-+-+-+-+-+ +-+-+-+-+-+-+-+-+
+//   |S|a|n|j|a|y| |N|a|r|a|y|a|n|a|
+//   +-+-+-+-+-+-+-+ +-+-+-+-+-+ +-+-+-+-+-+-+-+-+-+-+-+
+//   |S|h|a|n|u|s|h| |P|r|e|m|a| |T|h|a|s|a|r|a|t|h|a|n|
+//   +-+-+-+-+-+-+-+ +-+-+-+-+-+ +-+-+-+-+-+-+-+-+-+-+-+
+//   |S|i|m|o|n| |V|a|n| |W|i|n|d|e|n|
+//   +-+-+-+-+-+ +-+-+-+ +-+-+-+-+-+-+
+//   |J|e|s|s|e| |Y|u|e|
+//   +-+-+-+-+-+ +-+-+-+
+// 72 character limit...................................................
+
+
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -138,74 +157,97 @@ int numE(Map g, TransportID type)
     return nE;
 }
 
+// Finds the locations connected to "from"
+// * calculated the possibility of more travel by rail if asked for
+// * road, rail and sea are booleans: if TRUE then include connected
+//   locations by that transport
 LocationID *connLocs (Map g, int *numLocations,
                                LocationID from, PlayerID player, Round round,
                                int road, int rail, int sea) 
 {
-    //printf (">connLocs Called\n");
-    int visited[NUM_MAP_LOCATIONS] = {0};   
-    List connLocationList = newlist();
     
+    // This function uses a list as the number of possible
+    // connected location is unknown.
+    
+    List connLocationList = newlist();
+    int visited[NUM_MAP_LOCATIONS] = {0};
+    
+    // Add the from location to the list + visited
     appendLocation(connLocationList, from);
     visited[from] = 1;
     
     
-    //int arrayPos = 0;
+    // THINGS THAT NEEDED TO BE ACCOUNTED FOR:
+    // -> rail work
+    // -> account for count drac and castle drac
+    // -> add 'from' to the array as well.
     
     VList curr = g->connections[from];
     
-    /*
-     THINGS THAT NEEDED TO BE ACCOUNTED FOR:
-     -> rail work
-     -> account for count drac and castle drac
-     -> add 'from' to the array as well.
-     */
-    
+    // Looping through the connected Locations for
+    // the city / sea of interest
     while (curr != NULL) {
-        //printf ("   >road list loop updated\n");
-        if ((curr->type == ROAD) && (road == TRUE) && visited[curr->v] == 0) {
+        
+        // If:
+        // * the type is road
+        // * road is asked for
+        // * location hasn't been visited
+        if ((curr->type == ROAD) && (road == TRUE) &&
+            visited[curr->v] == 0) {
+            
             // valid connections exists for all to use
-            //connLocations[arrayPos] = curr->v;
             appendLocation(connLocationList, curr->v);
             visited[curr->v] = 1;
-            //printf ("      %s added to list as ROAD\n", idToName (curr->v));
+
         }
         
-        if ((curr->type == BOAT) && (sea == TRUE) && visited[curr->v] == 0) {
-            // valid sea exists for all to use.
-            //connLocations[arrayPos] = curr->v;
-            // arrayPos++;
+        // If:
+        // * the type is boat
+        // * boat is asked for
+        // * location hasn't been visited
+        if ((curr->type == BOAT) && (sea == TRUE)
+            && visited[curr->v] == 0) {
             
+            // valid sea exists for all to use.
             appendLocation(connLocationList, curr->v);
             visited[curr->v] = 1;
-            //printf ("      %s added to list as BOAT\n", idToName (curr->v));
+
         }
         
         curr = curr->next;
     }
     
-    //Find rail
-    // valid rail exists for hunters
-    // now calculate distances possible
+    // Find rail
+    // calculate distances possible
     // (roundNumber + hunterNumber) % 4
-    //  IF '0' : no train move allowed this turn
-    //  IF '1' : 1 train rail segment
-    //  IF '2' : 2 train rail segments
-    //  IF '3' : 3 train rail segments
+    // * IF '0' : no train move allowed this turn
+    // * IF '1' : 1 train rail segment
+    // * IF '2' : 2 train rail segments
+    // * IF '3' : 3 train rail segments
+    
     if (player != PLAYER_DRACULA && rail == TRUE) {
         int possibleRailDist = (player + round) % 4;
         joinTwoList(connLocationList,
-                    findRailConnections(g, from, possibleRailDist, visited));
+                    findRailConnections(g, from, possibleRailDist,
+                                        visited));
     }
     
+    // Converts list to array
     LocationID *connLocations;
     connLocations = convertListToArray(connLocationList, numLocations);
+    
+    deletelist(connLocationList);
     
     return connLocations;
 }
 
-static List findRailConnections(Map g, LocationID from, int possibleRailDist, int *visited) {
-    //printf ("    >findRailConnections called\n");
+// finds the rail connection. Uses depth first search
+// -- Warning: this function uses Recursion ;) --
+static List findRailConnections(Map g, LocationID from,
+                                int possibleRailDist, int *visited) {
+    
+
+
     if (possibleRailDist > 0) {
         
         List railConnections = newlist();
@@ -215,10 +257,18 @@ static List findRailConnections(Map g, LocationID from, int possibleRailDist, in
         while (curr != NULL) {
             if (curr->type == RAIL) {
                 if (visited[curr->v] == 0) {
+                    
+                    // If:
+                    // * type is Rail
+                    // * location has not be visited by rail or boat or
+                    //   road
                     appendLocation(railConnections, curr->v);
                     visited[curr->v] = 1;
                 }  
-                //printf ("          %s added to list as RAIL\n", idToName (curr->v));
+
+                // location might be visited - but there are possible
+                // rail connections that haven't been explored yet
+                // the beauty of recursion :)
                 joinTwoList(railConnections,
                             findRailConnections(g, curr->v, possibleRailDist-1, visited));
             }
@@ -228,6 +278,8 @@ static List findRailConnections(Map g, LocationID from, int possibleRailDist, in
         return railConnections;
         
     } else {
+        // Base case: possible rail distance is zero
+        //            then nothing to do (Return NULL)
         
         return NULL;
         

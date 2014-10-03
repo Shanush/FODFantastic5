@@ -1,5 +1,24 @@
 // testDracView.c ... test the DracView ADT
 
+// Edited by the group:
+//  ╔═╗╔═╗╔╦╗╔═╗┌─┐┌┐┌┌┬┐┌─┐┌─┐┌┬┐┬┌─┐5
+//  ╠╣ ║ ║ ║║╠╣ ├─┤│││ │ ├─┤└─┐ │ ││
+//  ╚  ╚═╝═╩╝╚  ┴ ┴┘└┘ ┴ ┴ ┴└─┘ ┴ ┴└─┘
+// *** Starring ***
+//   +-+-+-+-+-+ +-+-+-+-+-+
+//   |R|u|c|h|i| |G|u|p|t|a|
+//   +-+-+-+-+-+-+ +-+-+-+-+-+-+-+-+
+//   |S|a|n|j|a|y| |N|a|r|a|y|a|n|a|
+//   +-+-+-+-+-+-+-+ +-+-+-+-+-+ +-+-+-+-+-+-+-+-+-+-+-+
+//   |S|h|a|n|u|s|h| |P|r|e|m|a| |T|h|a|s|a|r|a|t|h|a|n|
+//   +-+-+-+-+-+-+-+ +-+-+-+-+-+ +-+-+-+-+-+-+-+-+-+-+-+
+//   |S|i|m|o|n| |V|a|n| |W|i|n|d|e|n|
+//   +-+-+-+-+-+ +-+-+-+ +-+-+-+-+-+-+
+//   |J|e|s|s|e| |Y|u|e|
+//   +-+-+-+-+-+ +-+-+-+
+// 72 character limit...................................................
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -166,6 +185,285 @@ int main()
     assert(howHealthyIs(dv,PLAYER_DRACULA) == GAME_START_BLOOD_POINTS);
     printf("passed\n");
     disposeDracView(dv);
+
+    // EXTRA TEST 1
+    printf("extra test 1\n");
+    PlayerMessage messages9[] = {"Hello","Rubbish","Stuff",""};
+    dv = newDracView("GVI.... SZU.... HBB.... MSO....", messages9);
+    assert(whereIs(dv, PLAYER_LORD_GODALMING) == VIENNA);
+    assert(whereIs(dv, PLAYER_DR_SEWARD) == ZURICH);
+    assert(whereIs(dv, PLAYER_VAN_HELSING) == BAY_OF_BISCAY);
+    assert(whereIs(dv, PLAYER_MINA_HARKER) == SOFIA);
+    assert(whereIs(dv, PLAYER_DRACULA) == UNKNOWN_LOCATION);
+    assert(howHealthyIs(dv,PLAYER_DRACULA) == GAME_START_BLOOD_POINTS);
+    disposeDracView(dv);
+    printf("passed extra1!\n");
+
+    // EXTRA TEST 2 - test putting traps twice
+    printf("extra test 2\n");
+    PlayerMessage messages10[] = {"Drop","party","at","Varrock"};
+    dv = newDracView("GHA.... SMA.... HVR.... MBI.... DSZ.V.. "
+                     "GCO.... SSR.... HSO.... MNP.... DZAT... "
+                     "GFR.... STO.... HBE.... MRO....", messages10);
+    assert(giveMeTheRound(dv) == 2);
+    assert((giveMeTheScore(dv)) == (GAME_START_SCORE - (SCORE_LOSS_DRACULA_TURN*giveMeTheRound(dv))));
+    
+    assert(whereIs(dv, PLAYER_LORD_GODALMING) == FRANKFURT);
+    assert(whereIs(dv, PLAYER_DR_SEWARD) == TOULOUSE);
+    assert(whereIs(dv, PLAYER_VAN_HELSING) == BELGRADE);
+    assert(whereIs(dv, PLAYER_MINA_HARKER) == ROME);
+    assert(whereIs(dv, PLAYER_DRACULA) == ZAGREB);
+    
+    int numOfTraps, numOfVamps;
+    whatsThere(dv,SZEGED,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 0 && numOfVamps == 1);
+    whatsThere(dv,ZAGREB,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 1 && numOfVamps == 0);
+//    whatsThere(dv,VIENNA,&numOfTraps,&numOfVamps);
+//    assert(numOfTraps == 1 && numOfVamps == 0);
+
+    assert(howHealthyIs(dv,PLAYER_DRACULA) == GAME_START_BLOOD_POINTS);
+    disposeDracView(dv);
+    printf("passed extra2!\n");
+
+    // EXTRA TEST 3 - deleting traps once trail has passed
+    printf("extra test 3!\n");
+    PlayerMessage messages11[] = {"Drop","party","at","Varrock"};
+    dv = newDracView("GHA.... SMA.... HVR.... MBI.... DSZT... "
+                     "GCO.... SSR.... HSO.... MNP.... DZAT... "
+                     "GFR.... STO.... HBE.... MRO.... DVIT... "
+                     "GCO.... SSR.... HSO.... MNP.... DPRT... "
+                     "GHA.... SMA.... HVR.... MBI.... DNUT... "
+                     "GFR.... STO.... HBE.... MRO.... DSTT... "
+                     "GHA.... SMA.... HVR.... MBI.... DPAT.M. "
+                     "GHA.... SMA.... HVR.... MBI.... ", messages11);
+    assert(giveMeTheRound(dv) == 7);
+    assert((giveMeTheScore(dv)) == (GAME_START_SCORE - (SCORE_LOSS_DRACULA_TURN*giveMeTheRound(dv))));
+    
+    assert(whereIs(dv, PLAYER_LORD_GODALMING) == HAMBURG);
+    assert(whereIs(dv, PLAYER_DR_SEWARD) == MADRID);
+    assert(whereIs(dv, PLAYER_VAN_HELSING) == VARNA);
+    assert(whereIs(dv, PLAYER_MINA_HARKER) == BARI);
+    assert(whereIs(dv, PLAYER_DRACULA) == PARIS);
+    
+    LocationID dracTrail[6] = {0};
+    giveMeTheTrail(dv, PLAYER_DRACULA, dracTrail);
+    
+    
+    whatsThere(dv,SZEGED,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 0 && numOfVamps == 0);
+    whatsThere(dv,SZEGED,&numOfTraps,&numOfVamps);
+    // since traps are destroyed after every 6 moves in the trail
+    assert(numOfTraps == 0 && numOfVamps == 0);
+    whatsThere(dv,VIENNA,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 1 && numOfVamps == 0);
+    whatsThere(dv,PRAGUE,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 1 && numOfVamps == 0);
+    whatsThere(dv,NUREMBURG,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 1 && numOfVamps == 0);
+    whatsThere(dv,STRASBOURG,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 1 && numOfVamps == 0);
+    whatsThere(dv,PARIS,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 1 && numOfVamps == 0);
+    
+    disposeDracView(dv);
+    printf("passed extra3!\n");
+
+
+    printf("extra test 3!\n");
+    dv = newDracView("GHA.... SMA.... HVR.... MBI.... DSZT... "
+                     "GCO.... SSR.... HSO.... MNP.... DZAT... "
+                     "GFR.... STO.... HBE.... MRO.... DVIT... "
+                     "GCO.... SSR.... HSO.... MNP.... DPRT... "
+                     "GHA.... SMA.... HVR.... MBI.... DNUT... "
+                     "GFR.... STO.... HBE.... MRO.... DSTT... "
+                     "GHA.... SMA.... HVR.... MBI.... DPAT.M. "
+                     "GHA.... SMA.... HVR.... MBI.... ", messages11);
+    assert(giveMeTheRound(dv) == 7);
+    assert((giveMeTheScore(dv)) == (GAME_START_SCORE - (SCORE_LOSS_DRACULA_TURN*giveMeTheRound(dv))));
+    
+    assert(whereIs(dv, PLAYER_LORD_GODALMING) == HAMBURG);
+    assert(whereIs(dv, PLAYER_DR_SEWARD) == MADRID);
+    assert(whereIs(dv, PLAYER_VAN_HELSING) == VARNA);
+    assert(whereIs(dv, PLAYER_MINA_HARKER) == BARI);
+    assert(whereIs(dv, PLAYER_DRACULA) == PARIS);
+    
+    whatsThere(dv,SZEGED,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 0 && numOfVamps == 0);
+    whatsThere(dv,SZEGED,&numOfTraps,&numOfVamps);
+    // since traps are destroyed after every 6 moves in the trail
+    assert(numOfTraps == 0 && numOfVamps == 0);
+    whatsThere(dv,VIENNA,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 1 && numOfVamps == 0);
+    whatsThere(dv,PRAGUE,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 1 && numOfVamps == 0);
+    whatsThere(dv,NUREMBURG,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 1 && numOfVamps == 0);
+    whatsThere(dv,STRASBOURG,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 1 && numOfVamps == 0);
+    whatsThere(dv,PARIS,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 1 && numOfVamps == 0);
+    
+    disposeDracView(dv);
+    printf("passed extra3!\n");
+
+    printf("extra test 4!\n");
+    dv = newDracView("GHA.... SMA.... HVR.... MBI.... DSZ.V.. "
+                     "GCO.... SSR.... HSO.... MNP.... DZAT... "
+                     "GFR.... STO.... HBE.... MRO.... DVIT... "
+                     "GCO.... SSR.... HSO.... MNP.... DPRT... "
+                     "GHA.... SMA.... HVR.... MBI.... DNUT... "
+                     "GFR.... STO.... HBE.... MRO.... DSTT... "
+                     "GHA.... SMA.... HVR.... MBI.... DPAT.V. "
+                     "GHA.... SMA.... HVR.... MBI.... ", messages11);
+    assert(giveMeTheRound(dv) == 7);
+    assert((giveMeTheScore(dv)) == (GAME_START_SCORE - (SCORE_LOSS_DRACULA_TURN*giveMeTheRound(dv)) -
+                                    SCORE_LOSS_VAMPIRE_MATURES));
+    
+    assert(whereIs(dv, PLAYER_LORD_GODALMING) == HAMBURG);
+    assert(whereIs(dv, PLAYER_DR_SEWARD) == MADRID);
+    assert(whereIs(dv, PLAYER_VAN_HELSING) == VARNA);
+    assert(whereIs(dv, PLAYER_MINA_HARKER) == BARI);
+    assert(whereIs(dv, PLAYER_DRACULA) == PARIS);
+    
+    
+    whatsThere(dv,SZEGED,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 0 && numOfVamps == 0);
+    whatsThere(dv,SZEGED,&numOfTraps,&numOfVamps);
+    // since traps are destroyed after every 6 moves in the trail
+    assert(numOfTraps == 0 && numOfVamps == 0);
+    whatsThere(dv,VIENNA,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 1 && numOfVamps == 0);
+    whatsThere(dv,PRAGUE,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 1 && numOfVamps == 0);
+    whatsThere(dv,NUREMBURG,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 1 && numOfVamps == 0);
+    whatsThere(dv,STRASBOURG,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 1 && numOfVamps == 0);
+    whatsThere(dv,PARIS,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 1 && numOfVamps == 0);
+    
+    disposeDracView(dv);
+    printf("passed extra4!\n");
+
+    printf("extra test 5!\n");
+    dv = newDracView("GHA.... SMA.... HVR.... MBI.... DSZ.V.. "
+                     "GCO.... SSR.... HSO.... MNP.... DZAT... "
+                     "GFR.... STO.... HBE.... MRO.... DVIT... "
+                     "GCO.... SSR.... HSO.... MNP.... DPRT... "
+                     "GHA.... SMA.... HVR.... MBI.... DNU.V.. "
+                     "GFR.... STO.... HBE.... MRO.... DSTT... "
+                     "GHA.... SMA.... HVR.... MBI.... DPAT.V. "
+                     "GHA.... SMA.... HVR.... MBI.... ", messages11);
+    assert(giveMeTheRound(dv) == 7);
+    assert((giveMeTheScore(dv)) == (GAME_START_SCORE - (SCORE_LOSS_DRACULA_TURN*giveMeTheRound(dv)) -
+                                    SCORE_LOSS_VAMPIRE_MATURES));
+    
+    assert(whereIs(dv, PLAYER_LORD_GODALMING) == HAMBURG);
+    assert(whereIs(dv, PLAYER_DR_SEWARD) == MADRID);
+    assert(whereIs(dv, PLAYER_VAN_HELSING) == VARNA);
+    assert(whereIs(dv, PLAYER_MINA_HARKER) == BARI);
+    assert(whereIs(dv, PLAYER_DRACULA) == PARIS);
+    
+    
+    whatsThere(dv,SZEGED,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 0 && numOfVamps == 0);
+    whatsThere(dv,SZEGED,&numOfTraps,&numOfVamps);
+    // since traps are destroyed after every 6 moves in the trail
+    assert(numOfTraps == 0 && numOfVamps == 0);
+    whatsThere(dv,VIENNA,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 1 && numOfVamps == 0);
+    whatsThere(dv,PRAGUE,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 1 && numOfVamps == 0);
+    whatsThere(dv,NUREMBURG,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 0 && numOfVamps == 1);
+    whatsThere(dv,STRASBOURG,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 1 && numOfVamps == 0);
+    whatsThere(dv,PARIS,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 1 && numOfVamps == 0);
+    
+    disposeDracView(dv);
+    printf("passed extra5!\n");
+    
+    printf("extra test 6!\n");
+    dv = newDracView("GHA.... SMA.... HVR.... MBI.... DSZ.V.. "
+                     "GCO.... SSR.... HSO.... MNP.... DZAT... "
+                     "GFR.... STO.... HBE.... MRO.... DVIT... "
+                     "GCO.... SSR.... HSO.... MNP.... DPRT... "
+                     "GHA.... SMA.... HVR.... MBI.... DNU.V.. "
+                     "GFR.... SNUV... HBE.... MRO.... DSTT... "
+                     "GHA.... SMA.... HVR.... MBI.... DPAT.V. "
+                     "GHA.... SMA.... HVR.... MBI.... ", messages11);
+    assert(giveMeTheRound(dv) == 7);
+    assert((giveMeTheScore(dv)) == (GAME_START_SCORE - (SCORE_LOSS_DRACULA_TURN*giveMeTheRound(dv)) -
+                                    SCORE_LOSS_VAMPIRE_MATURES));
+    
+    assert(whereIs(dv, PLAYER_LORD_GODALMING) == HAMBURG);
+    assert(whereIs(dv, PLAYER_DR_SEWARD) == MADRID);
+    assert(whereIs(dv, PLAYER_VAN_HELSING) == VARNA);
+    assert(whereIs(dv, PLAYER_MINA_HARKER) == BARI);
+    assert(whereIs(dv, PLAYER_DRACULA) == PARIS);
+    
+    
+    whatsThere(dv,SZEGED,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 0 && numOfVamps == 0);
+    whatsThere(dv,SZEGED,&numOfTraps,&numOfVamps);
+    // since traps are destroyed after every 6 moves in the trail
+    assert(numOfTraps == 0 && numOfVamps == 0);
+    whatsThere(dv,VIENNA,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 1 && numOfVamps == 0);
+    whatsThere(dv,PRAGUE,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 1 && numOfVamps == 0);
+    whatsThere(dv,NUREMBURG,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 0 && numOfVamps == 0);
+    whatsThere(dv,STRASBOURG,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 1 && numOfVamps == 0);
+    whatsThere(dv,PARIS,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 1 && numOfVamps == 0);
+    
+    disposeDracView(dv);
+    printf("passed extra6!\n");
+    
+    
+    
+    printf("extra test 7!\n");
+    dv = newDracView("GHA.... SMA.... HVR.... MBI.... DSZ.V.. "
+                     "GCO.... SSR.... HSO.... MNP.... DZAT... "
+                     "GFR.... STO.... HBE.... MRO.... DVIT... "
+                     "GCO.... SSR.... HSO.... MNP.... DPRT... "
+                     "GHA.... SMA.... HVR.... MBI.... DNU.V.. "
+                     "GFR.... SNUV... HSZV... MRO.... DSTT... "
+                     "GHA.... SMA.... HVR.... MBI.... DPAT... "
+                     "GHA.... SMA.... HVR.... MBI.... ", messages11);
+    assert(giveMeTheRound(dv) == 7);
+    assert((giveMeTheScore(dv)) == (GAME_START_SCORE - (SCORE_LOSS_DRACULA_TURN*giveMeTheRound(dv))));
+    
+    assert(whereIs(dv, PLAYER_LORD_GODALMING) == HAMBURG);
+    assert(whereIs(dv, PLAYER_DR_SEWARD) == MADRID);
+    assert(whereIs(dv, PLAYER_VAN_HELSING) == VARNA);
+    assert(whereIs(dv, PLAYER_MINA_HARKER) == BARI);
+    assert(whereIs(dv, PLAYER_DRACULA) == PARIS);
+    
+    
+    whatsThere(dv,SZEGED,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 0 && numOfVamps == 0);
+    whatsThere(dv,SZEGED,&numOfTraps,&numOfVamps);
+    // since traps are destroyed after every 6 moves in the trail
+    assert(numOfTraps == 0 && numOfVamps == 0);
+    whatsThere(dv,VIENNA,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 1 && numOfVamps == 0);
+    whatsThere(dv,PRAGUE,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 1 && numOfVamps == 0);
+    whatsThere(dv,NUREMBURG,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 0 && numOfVamps == 0);
+    whatsThere(dv,STRASBOURG,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 1 && numOfVamps == 0);
+    whatsThere(dv,PARIS,&numOfTraps,&numOfVamps);
+    assert(numOfTraps == 1 && numOfVamps == 0);
+    
+    disposeDracView(dv);
+    printf("passed extra7!\n");
+    
     return 0;
 }
 
