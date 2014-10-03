@@ -336,26 +336,37 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
 // Takes care of city and sea unknown
 // As well as hide and double backs
 LocationID abbrevToLocationID(char *abbrev) {
+    
     if (!strcmp(abbrev,"C?")) {
         return CITY_UNKNOWN;
+        
     } else if (!strcmp(abbrev,"S?")) {
         return SEA_UNKNOWN;
+        
     } else if (!strcmp(abbrev,"HI")) {
         return HIDE;
+        
     } else if (!strcmp(abbrev,"D1")) {
         return DOUBLE_BACK_1;
+        
     } else if (!strcmp(abbrev,"D2")) {
         return DOUBLE_BACK_2;
+        
     } else if (!strcmp(abbrev,"D3")) {
         return DOUBLE_BACK_3;
+        
     } else if (!strcmp(abbrev,"D4")) {
         return DOUBLE_BACK_4;
+        
     } else if (!strcmp(abbrev,"D5")) {
         return DOUBLE_BACK_5;
+        
     } else if (!strcmp(abbrev,"TP")) {
         return TELEPORT;
+        
     } else {
         return abbrevToID(abbrev);
+        
     }
 }
 
@@ -377,24 +388,22 @@ void updateLocationOfPlayer(char *abbrev, player *currentPlayer) {
 
 // reduces heath for dracula if discoved to be at sea
 void reduceHealthIfAtSea (player *currentPlayer) {
-    //boolean to determine if we should deduct HP
+    // Boolean to determine if we should deduct HP
     int dropHealth = FALSE;
     
-    //doubleBack, number used if a doubleback is present
+    // DoubleBack, number used if a doubleback is present
     int dB = 0;
     
-    //if he is in an unknown sea (hunter view)
+    // If he is in an unknown sea (hunter view)
     if (currentPlayer->trail[0] == SEA_UNKNOWN) {
         dropHealth = TRUE;
+        
+    // If the current location is a hide - it can't possibly be
+    // to a sea. Hence we test for whether the currentLocation is not
+    // a sea
     } else if (currentPlayer->trail[0] != HIDE) {
-        /*int hidden = 0;
-        if (currentPlayer->trail[0] == HIDE) {
-            //if the item at that trail was a hide, then
-            //the correct location was the location before
-            hidden++;
-        }*/
         switch (currentPlayer->trail[0]) {
-            //Set dB to correponding doubleBack number
+            // Set dB to correponding doubleBack number
             case DOUBLE_BACK_1: dB = 1; break;
             case DOUBLE_BACK_2: dB = 2; break;
             case DOUBLE_BACK_3: dB = 3; break;
@@ -403,9 +412,13 @@ void reduceHealthIfAtSea (player *currentPlayer) {
             default: break;
         }
         if (currentPlayer->trail[dB] != HIDE) {
+            // We check again to see if the double back was to
+            // a hide. If so - a sea is not possible
+            // if it wasn't... well:
+            
             if (dB > 0) {
                 printf("\n");
-                //If the location was at sea - then drop the health
+                // If the location was at sea - then drop the health
                 if (currentPlayer->trail[dB] == SEA_UNKNOWN) {
                     dropHealth = TRUE;
                 } else if (idToType (currentPlayer->trail[dB]) == SEA) {
@@ -414,7 +427,7 @@ void reduceHealthIfAtSea (player *currentPlayer) {
             } else if (currentPlayer->trail[0] >= MIN_MAP_LOCATION &&
                        currentPlayer->trail[0] <= MAX_MAP_LOCATION &&
                        idToType (currentPlayer->trail[0]) == SEA) {
-                //the most recently visited location is a sea...
+                // the most recently visited location is a sea...
                 dropHealth = TRUE;
             }
         }

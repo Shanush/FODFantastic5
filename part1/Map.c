@@ -194,7 +194,6 @@ LocationID *connLocs (Map g, int *numLocations,
         // * location hasn't been visited
         if ((curr->type == ROAD) && (road == TRUE) &&
             visited[curr->v] == 0) {
-            //printf("curr loc id is %s\n", idToName(curr->v));
             // valid connections exists for all to use
             appendLocation(connLocationList, curr->v);
             visited[curr->v] = 1;
@@ -207,7 +206,6 @@ LocationID *connLocs (Map g, int *numLocations,
         // * location hasn't been visited
         if ((curr->type == BOAT) && (sea == TRUE)
             && visited[curr->v] == 0) {
-            //printf("curr loc id is %s\n", idToName(curr->v));
             // valid sea exists for all to use.
             appendLocation(connLocationList, curr->v);
             visited[curr->v] = 1;
