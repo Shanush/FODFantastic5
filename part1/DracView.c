@@ -12,6 +12,7 @@
 // #include "Map.h" ... if you decide to use the Map ADT
 
 #define TURN_SIZE 8
+#define ROUND_SIZE 40
 
 struct dracView {
     GameView gV;
@@ -61,12 +62,12 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
             }
             
             if (pastPlays[action+2] == 'M') {
-                dracView->traps[currentLocation]--;
+                dracView->traps[findTrueLocation(pastPlays, (turn+1)-(ROUND_SIZE*6))]--;
             }
             
             // If vampire matured (not placed)
             if (pastPlays[action+2]== 'V') {
-                dracView->vampire[currentLocation]--;
+                dracView->vampire[findTrueLocation(pastPlays, (turn+1)-(ROUND_SIZE*6))]--;
             }
         } else {
             while (action % TURN_SIZE != 0) {
