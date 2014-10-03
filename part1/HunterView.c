@@ -1,12 +1,32 @@
 // HunterView.c ... HunterView ADT implementation
 
+// Made by the group:
+//  ╔═╗╔═╗╔╦╗╔═╗┌─┐┌┐┌┌┬┐┌─┐┌─┐┌┬┐┬┌─┐5
+//  ╠╣ ║ ║ ║║╠╣ ├─┤│││ │ ├─┤└─┐ │ ││
+//  ╚  ╚═╝═╩╝╚  ┴ ┴┘└┘ ┴ ┴ ┴└─┘ ┴ ┴└─┘
+// *** Starring ***
+//   +-+-+-+-+-+ +-+-+-+-+-+
+//   |R|u|c|h|i| |G|u|p|t|a|
+//   +-+-+-+-+-+-+ +-+-+-+-+-+-+-+-+
+//   |S|a|n|j|a|y| |N|a|r|a|y|a|n|a|
+//   +-+-+-+-+-+-+-+ +-+-+-+-+-+ +-+-+-+-+-+-+-+-+-+-+-+
+//   |S|h|a|n|u|s|h| |P|r|e|m|a| |T|h|a|s|a|r|a|t|h|a|n|
+//   +-+-+-+-+-+-+-+ +-+-+-+-+-+ +-+-+-+-+-+-+-+-+-+-+-+
+//   |S|i|m|o|n| |V|a|n| |W|i|n|d|e|n|
+//   +-+-+-+-+-+ +-+-+-+ +-+-+-+-+-+-+
+//   |J|e|s|s|e| |Y|u|e|
+//   +-+-+-+-+-+ +-+-+-+
+// 72 character limit...................................................
+
+// Since hunterview is exactly like gameview
+// HunterView is just a wrapper
+
 #include <stdlib.h>
 #include <assert.h>
 #include "Globals.h"
 #include "Game.h"
 #include "GameView.h"
 #include "HunterView.h"
-// #include "Map.h" ... if you decide to use the Map ADT
      
 struct hunterView {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
