@@ -70,8 +70,6 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
     
     int turn = 0;
     
-    printf("before the while loop\n");
-    
     while (turn < strlen(pastPlays)) {
         //locate the first action of the turn in the string
         int action = turn+3;
