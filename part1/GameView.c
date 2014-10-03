@@ -318,7 +318,11 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
                                int road, int rail, int sea)
 {
     // use map in gameview
-    
+    if(player == PLAYER_DRACULA) {
+        printf("Player is %d, road is %d, rail is %d, sea is %d\n", player, road, rail, sea);
+        printf("Start location is %d\n", from);
+        printf("Start location is %s\n", idToName(from));
+    }
     // pass it onto Map.c
     return connLocs(currentView->europe, numLocations,
                                from, player, round,
@@ -382,7 +386,13 @@ void reduceHealthIfAtSea (player *currentPlayer) {
     //if he is in an unknown sea (hunter view)
     if (currentPlayer->trail[0] == SEA_UNKNOWN) {
         dropHealth = TRUE;
-    } else {
+    } else if (currentPlayer->trail[0] != HIDE) {
+        /*int hidden = 0;
+        if (currentPlayer->trail[0] == HIDE) {
+            //if the item at that trail was a hide, then
+            //the correct location was the location before
+            hidden++;
+        }*/
         switch (currentPlayer->trail[0]) {
             //Set dB to correponding doubleBack number
             case DOUBLE_BACK_1: dB = 1; break;
@@ -392,23 +402,21 @@ void reduceHealthIfAtSea (player *currentPlayer) {
             case DOUBLE_BACK_5: dB = 5; break;
             default: break;
         }
-        if (currentPlayer->trail[dB] == HIDE) {
-            //if the item at that trail was a hide, then
-            //the correct location was the location before
-            dB++;
-        }
-        if (dB > 0) {
-            //If the location was at sea - then drop the health
-            if (currentPlayer->trail[dB] == SEA_UNKNOWN) {
-                dropHealth = TRUE;
-            } else if (idToType (currentPlayer->trail[dB]) == SEA) {
+        if (currentPlayer->trail[dB] != HIDE) {
+            if (dB > 0) {
+                printf("\n");
+                //If the location was at sea - then drop the health
+                if (currentPlayer->trail[dB] == SEA_UNKNOWN) {
+                    dropHealth = TRUE;
+                } else if (idToType (currentPlayer->trail[dB]) == SEA) {
+                    dropHealth = TRUE;
+                }
+            } else if (currentPlayer->trail[0] >= MIN_MAP_LOCATION &&
+                       currentPlayer->trail[0] <= MAX_MAP_LOCATION &&
+                       idToType (currentPlayer->trail[0]) == SEA) {
+                //the most recently visited location is a sea...
                 dropHealth = TRUE;
             }
-        } else if (currentPlayer->trail[0] >= MIN_MAP_LOCATION &&
-                   currentPlayer->trail[0] <= MAX_MAP_LOCATION &&
-                   idToType (currentPlayer->trail[0]) == SEA) {
-            //the most recently visited location is a sea...
-            dropHealth = TRUE;
         }
     }
     

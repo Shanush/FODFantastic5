@@ -35,6 +35,7 @@ struct dracView {
     GameView gV;
     int traps[NUM_MAP_LOCATIONS];
     int vampire[NUM_MAP_LOCATIONS];
+    LocationID trueLocation;
 };
 
 // Helper function
@@ -95,6 +96,7 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
             if (pastPlays[action+2]== 'V') {
                 dracView->vampire[findTrueLocation(pastPlays, (turn+1)-(ROUND_SIZE*6))]--;
             }
+            dracView->trueLocation = currentLocation;
         } else {
             while (action % TURN_SIZE != 0) {
                 switch (pastPlays[action]) {
@@ -112,7 +114,6 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
         }
         turn += TURN_SIZE;
     }
-
     
     return dracView;
 }
@@ -237,8 +238,7 @@ void giveMeTheTrail(DracView currentView, PlayerID player,
 LocationID *whereCanIgo(DracView currentView, int *numLocations, int road, int sea)
 {
     return connectedLocations(currentView->gV, numLocations,
-                              getLocation(currentView->gV,
-                                          PLAYER_DRACULA),
+                              currentView->trueLocation,
                               PLAYER_DRACULA, getRound(currentView->gV),
                               road, FALSE, sea);
 }

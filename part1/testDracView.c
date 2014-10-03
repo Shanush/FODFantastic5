@@ -91,10 +91,16 @@ int main()
     printf("passed\n");
     disposeDracView(dv);
     // needs further work - double back 2 not working
-    /*dv = newDracView("GGE.... SGE.... HGE.... MGE.... DED.V.. "
+    dv = newDracView("GGE.... SGE.... HGE.... MGE.... DED.V.. "
                      "GST.... SST.... HST.... MST.... DHIT... "
                      "GST.... SST.... HST.... MST.... DMNT... "
-                     "GST.... SST.... HST.... MST.... DD2T...", messages3);*/
+                     "GST.... SST.... HST.... MST.... DD2T...", messages3);
+    whatsThere(dv,EDINBURGH,&nT,&nV);
+    assert(nV == 1);
+    whatsThere(dv, MANCHESTER, &nT, &nV);
+    assert(nT == 1 && nV == 0);
+    whatsThere(dv,EDINBURGH,&nT,&nV);
+    assert(nT == 2 && nV == 1);
     dv = newDracView("GGE.... SGE.... HGE.... MGE.... DED.V.. "
                      "GST.... SST.... HST.... MST.... DHIT... "
                      "GST.... SST.... HST.... MST.... DMNT... "
@@ -132,6 +138,49 @@ int main()
     whatsThere(dv,EDINBURGH,&nT,&nV);
     assert(nT == 2 && nV == 1);
     printf("passed our tests\n");
+    
+    //-------------------------
+    
+    // Visual inspection required!
+    printf("\nConn. locs. tests. Eyeball for authenticity:\n");
+    dv = newDracView("GGE.... SGE.... HGE.... MGE.... DED.V.. "
+                     "GST.... SST.... HST.... MST.... DMNT... "
+                     "GST.... SST.... HST.... MST.... DLOT...", messages3);
+    int numlocations;
+    LocationID *locations = whereCanIgo(dv, &numlocations, TRUE, FALSE);
+    for (int i = numlocations-1; i >= 0; i--) {
+        printf("Location is %d, aka %s\n", locations[i], idToName(locations[i]));
+    }
+    dv = newDracView("GGE.... SGE.... HGE.... MGE.... DED.V.. "
+                     "GST.... SST.... HST.... MST.... DMNT... "
+                     "GST.... SST.... HST.... MST.... DD2T...", messages3);
+    locations = whereCanIgo(dv, &numlocations, TRUE, FALSE);
+    for (int i = numlocations-1; i >= 0; i--) {
+        printf("Location is %d, aka %s\n", locations[i], idToName(locations[i]));
+    }
+    dv = newDracView("GST.... SST.... HST.... MST.... DMNT... "
+                     "GST.... SST.... HST.... MST.... DLOT... "
+                     "GST.... SST.... HST.... MST.... DD2T... "
+                     "GST.... SST.... HST.... MST.... DHIT... "
+                     "GST.... SST.... HST.... MST....", messages3);
+    locations = whereCanIgo(dv, &numlocations, TRUE, FALSE);
+    for (int i = numlocations-1; i >= 0; i--) {
+        printf("Location is %d, aka %s\n", locations[i], idToName(locations[i]));
+    }
+    printf("last devious test\n");
+    dv = newDracView("GST.... SST.... HST.... MST.... DPRT... "
+                     "GST.... SST.... HST.... MST.... DBRT... "
+                     "GST.... SST.... HST.... MST.... DHAT... "
+                     "GST.... SST.... HST.... MST.... DCOT... "
+                     "GST.... SST.... HST.... MST.... DAMT... "
+                     "GST.... SST.... HST.... MST.... DD3T... "
+                     "GST.... SST.... HST.... MST.... DHIT... "
+                     "GST.... SST.... HST.... MST....", messages3);
+    locations = whereCanIgo(dv, &numlocations, TRUE, FALSE);
+    for (int i = numlocations-1; i >= 0; i--) {
+        printf("Location is %d, aka %s\n", locations[i], idToName(locations[i]));
+    }
+    printf("passed tricky conn. locs. tests\n");
     
     //-------------------------
     
