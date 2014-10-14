@@ -417,11 +417,16 @@ void reduceHealthIfAtSea (player *currentPlayer) {
             // if it wasn't... well:
             
             if (dB > 0) {
-                printf("\n");
+                //printf("\n");
                 // If the location was at sea - then drop the health
+                
+                printf("trail[1] = %d\n", currentPlayer->trail[1]);
+                
                 if (currentPlayer->trail[dB] == SEA_UNKNOWN) {
                     dropHealth = TRUE;
-                } else if (idToType (currentPlayer->trail[dB]) == SEA) {
+                } else if (currentPlayer->trail[dB] >= MIN_MAP_LOCATION &&
+                           currentPlayer->trail[dB] <= MAX_MAP_LOCATION &&
+                           idToType (currentPlayer->trail[dB]) == SEA) {
                     dropHealth = TRUE;
                 }
             } else if (currentPlayer->trail[0] >= MIN_MAP_LOCATION &&

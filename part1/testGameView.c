@@ -204,6 +204,11 @@ int main()
                      "GST.... SST.... HST.... MST.... DD1T...", mess3);
     assert(getLocation(gv, PLAYER_DRACULA) == DOUBLE_BACK_1);
     
+    
+    // Seeing if these one cause asserts to pop up
+    gv = newGameView("GED.... SGE.... HZU.... MCA.... DCD.V.. GNS.... SMR.... HMR.... MMA.... DC?T... GAO.... SMR.... HMR.... MLS.... DC?T... GAO.... SMR.... HMR.... MSN.... DC?T... GAO.... SMR.... HMR.... MSR.... DD1T... GAO....", mess3);
+    
+    
     // ---------------------------------
     
     //Testing incomplete round

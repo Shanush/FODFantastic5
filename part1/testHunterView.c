@@ -145,6 +145,9 @@ int main()
     }
     printf("passed\n");
     
+    // Check if these cause asserts to happen
+    hv = newHunterView("GED.... SGE.... HZU.... MCA.... DCD.V.. GNS.... SMR.... HMR.... MMA.... DC?T... GAO.... SMR.... HMR.... MLS.... DC?T... GAO.... SMR.... HMR.... MSN.... DC?T... GAO.... SMR.... HMR.... MSR.... DD1T... GAO....", mess0);
+    
     return 0;
 }
 
