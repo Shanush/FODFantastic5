@@ -6,6 +6,7 @@
 #include <time.h>
 #include "Game.h"
 #include "HunterView.h"
+#include "Places.h"
 
 
 #define TRUE 1
