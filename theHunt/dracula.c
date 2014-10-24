@@ -39,23 +39,17 @@ void decideDraculaMove(DracView gameState)
         
         possibleLocations = whereCanIgo(gameState, &numPossibleLocations, TRUE, TRUE);
         
-        int foundLocation = FALSE;
-        int index = 0;
-        
-        while (!foundLocation || index >= numPossibleLocations) {
-            if (inTrail(possibleLocations[index], gameState)) {
-                index++;
-            } else {
-                foundLocation = TRUE;
-            }
-        }
-        
         LocationID locationToGo;
         
-        if (foundLocation) {
-            locationToGo = possibleLocations[index];
-        } else {
-            locationToGo = possibleLocations[0];
+        int index = 0;
+        
+        int foundLocation = FALSE:
+        
+        while (index < numPossibleLocations && !foundLocation) {
+            if (!inTrail(possibleLocations[index], gameState)) {
+                locationToGo = possibleLocations[index];
+                foundLocation = TRUE;
+            }
         }
         
         
@@ -77,7 +71,7 @@ void decideDraculaMove(DracView gameState)
 
 
 int inTrail(LocationID location, DracView gameState) {
-    LocationID *trail;
+    LocationID *trail = NULL;
     giveMeTheTrail(gameState, PLAYER_DRACULA, trail);
     
     int i;
