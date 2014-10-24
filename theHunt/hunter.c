@@ -12,7 +12,7 @@
 #define TRUE 1
 #define FALSE 0
 
-#define DEBUG
+#define DEBUG 1
 
 void decideHunterMove(HunterView gameState)
 {
