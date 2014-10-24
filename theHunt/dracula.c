@@ -10,6 +10,8 @@
 #define TRUE 1
 #define FALSE 0
 
+int inTrail(LocationID location, DracView gameState);
+
 void decideDraculaMove(DracView gameState)
 {
     int roundNumber = giveMeTheRound(gameState);
