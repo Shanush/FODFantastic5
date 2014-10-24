@@ -39,17 +39,19 @@ void decideDraculaMove(DracView gameState)
         
         possibleLocations = whereCanIgo(gameState, &numPossibleLocations, TRUE, TRUE);
         
-        LocationID locationToGo;
+        LocationID locationToGo = possibleLocations[0];
         
         int index = 0;
         
-        int foundLocation = FALSE:
+        int foundLocation = FALSE;
         
         while (index < numPossibleLocations && !foundLocation) {
+            printf("In here\n");
             if (!inTrail(possibleLocations[index], gameState)) {
                 locationToGo = possibleLocations[index];
                 foundLocation = TRUE;
             }
+            index++;
         }
         
         
