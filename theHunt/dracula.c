@@ -71,7 +71,7 @@ void decideDraculaMove(DracView gameState)
 
 
 int inTrail(LocationID location, DracView gameState) {
-    LocationID *trail = NULL;
+    LocationID trail[TRAIL_SIZE] = {0};
     giveMeTheTrail(gameState, PLAYER_DRACULA, trail);
     
     int i;
