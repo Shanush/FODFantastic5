@@ -7,6 +7,9 @@
 #include "Game.h"
 #include "DracView.h"
 
+#define TRUE 1
+#define FALSE 0
+
 void decideDraculaMove(DracView gameState)
 {
     int roundNumber = giveMeTheRound(gameState);
@@ -21,7 +24,7 @@ void decideDraculaMove(DracView gameState)
 #endif
         
         // Go to predermined location
-        registerBestPlay("CD","Mwuhahahaha");
+        registerBestPlay("CD","");
         
     } else {
         
@@ -33,7 +36,18 @@ void decideDraculaMove(DracView gameState)
         
         possibleLocations = whereCanIgo(gameState, &numPossibleLocations, TRUE, TRUE);
         
-        int randomPosition = rand()%numPossibleLocations;
+        int foundLocation = 0;
+        int index = 0;
+        
+        while (!foundLocation) {
+            if (inTrail(possibleLocations[index], gameState)) {
+                index++;
+            } else {
+                foundLocation = TRUE;
+            }
+        }
+        
+        /*int randomPosition = rand()%numPossibleLocations;
         
         if (randomPosition == 0) {
             randomPosition++;
@@ -41,10 +55,24 @@ void decideDraculaMove(DracView gameState)
             randomPosition--;
         }
         
-        LocationID locationToGo = possibleLocations[randomPosition];
+        LocationID locationToGo = possibleLocations[randomPosition];*/
         
-        registerBestPlay(idToAbbrev(locationToGo) ,"DRACULA GOES TO ...");
+        registerBestPlay(idToAbbrev(locationToGo) ,"");
         
     }
 
+}
+
+
+int inTrail(LocationID location, DracView gameState) {
+    LocationID *trail;
+    giveMeTheTrail(gameState, PLAYER_DRACULA, trail);
+    
+    for (int i = 0; i < TRAIL_SIZE; i++) {
+        if (trail[i] == location) {
+            return FALSE;
+        }
+    }
+    
+    return TRUE;
 }
