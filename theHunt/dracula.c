@@ -6,6 +6,7 @@
 #include <time.h>
 #include "Game.h"
 #include "DracView.h"
+#include "Places.h"
 
 #define TRUE 1
 #define FALSE 0
@@ -38,16 +39,25 @@ void decideDraculaMove(DracView gameState)
         
         possibleLocations = whereCanIgo(gameState, &numPossibleLocations, TRUE, TRUE);
         
-        int foundLocation = 0;
+        int foundLocation = FALSE;
         int index = 0;
         
-        while (!foundLocation) {
+        while (!foundLocation || index >= numPossibleLocations) {
             if (inTrail(possibleLocations[index], gameState)) {
                 index++;
             } else {
                 foundLocation = TRUE;
             }
         }
+        
+        LocationID locationToGo;
+        
+        if (foundLocation) {
+            locationToGo = possibleLocations[index];
+        } else {
+            locationToGo = possibleLocations[0];
+        }
+        
         
         /*int randomPosition = rand()%numPossibleLocations;
         
@@ -70,11 +80,13 @@ int inTrail(LocationID location, DracView gameState) {
     LocationID *trail;
     giveMeTheTrail(gameState, PLAYER_DRACULA, trail);
     
-    for (int i = 0; i < TRAIL_SIZE; i++) {
+    int i;
+    
+    for (i = 0; i < TRAIL_SIZE; i++) {
         if (trail[i] == location) {
-            return FALSE;
+            return TRUE;
         }
     }
     
-    return TRUE;
+    return FALSE;
 }
