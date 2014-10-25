@@ -81,7 +81,7 @@ void decideHunterMove(HunterView gameState)
         // Move to a random allowed location
         // Bacically a STUB
         
-        LocationID locationToGo = bestLocationToMoveTo();
+        LocationID locationToGo = bestLocationToMoveTo(gameState);
         
         registerBestPlay(idToAbbrev(locationToGo) ,"I'm on holiday in Geneva");
     }
