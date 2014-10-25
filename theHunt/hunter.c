@@ -7,12 +7,16 @@
 #include "Game.h"
 #include "HunterView.h"
 #include "Places.h"
+#include "Map.h"
 
 
 #define TRUE 1
 #define FALSE 0
 
 #define DEBUG 1
+
+LocationID bestLocationToMoveTo (HunterView gameState);
+LocationID lastLocationOfDracula(HunterView gameState);
 
 void decideHunterMove(HunterView gameState)
 {
@@ -77,6 +81,22 @@ void decideHunterMove(HunterView gameState)
         // Move to a random allowed location
         // Bacically a STUB
         
+        LocationID locationToGo = bestLocationToMoveTo();
+        
+        registerBestPlay(idToAbbrev(locationToGo) ,"I'm on holiday in Geneva");
+    }
+    
+    
+    
+}
+
+
+LocationID bestLocationToMoveTo (HunterView gameState) {
+    
+    LocationID lastLocOfDracula = lastLocationOfDracula(gameState);
+    
+    if (lastLocOfDracula == UNKNOWN_LOCATION) {
+    
         LocationID *possibleLocations;
         int numPossibleLocations;
         
@@ -92,9 +112,48 @@ void decideHunterMove(HunterView gameState)
         
         LocationID locationToGo = possibleLocations[randomPosition];
         
-        registerBestPlay(idToAbbrev(locationToGo) ,"I'm on holiday in Geneva");
+        return locationToGo;
+    
     }
     
+    return UNKNOWN_LOCATION;
     
+
+}
+
+LocationID lastLocationOfDracula(HunterView gameState) {
+    
+    
+    /*LocationID draculaTrail[TRAIL_SIZE] = {0};
+    giveMeTheTrail(gameState, PLAYER_DRACULA, draculaTrail);
+    
+    int i;
+    for (i = 0; i < TRAIL_SIZE; i++) {
+        if (draculaTrail[i] != UNKNOWN_LOCATION) {
+            return draculaTrail[i];
+        }
+    }
+    */
+    
+    return UNKNOWN_LOCATION;
+    
+    
+    
+    
+    /*LocationID *possibleLocation;
+    LocationID targetLocaiton;
+    int numPossibleLocaitons;
+    
+    int minDistance = distance(possibleLocation[0],targetLocaiton);
+    int minLocation = possibleLocation[0];
+    
+    int i;
+    for (i = 1; i < numPossibleLocaitons; i++) {
+        int distance = distance(possibleLocation[i],targetLocaiton);
+        if (distance < minDistance) {
+            minDistance = distance;
+            minLocation = possibleLocation[i];
+        }
+    }*/
     
 }
