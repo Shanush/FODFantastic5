@@ -51,7 +51,7 @@ struct MapRep {
 static void addConnections(Map);
 static List findRailConnections(Map g, LocationID from, int possibleRailDist, int *visited);
 Edge asSingleVertex(LocationID vertex);
-int interestCity(LocationID currCity, LocationID *cities, int numCities)
+int interestCity(LocationID currCity, LocationID *cities, int numCities);
 
 // Create a new empty graph (for a map)
 // #Vertices always same as NUM_PLACES

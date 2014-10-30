@@ -208,6 +208,11 @@ int main()
     // Seeing if these one cause asserts to pop up
     gv = newGameView("GED.... SGE.... HZU.... MCA.... DCD.V.. GNS.... SMR.... HMR.... MMA.... DC?T... GAO.... SMR.... HMR.... MLS.... DC?T... GAO.... SMR.... HMR.... MSN.... DC?T... GAO.... SMR.... HMR.... MSR.... DD1T... GAO....", mess3);
     
+    // ---------------------------------
+    
+    // Testing closest city function
+    LocationID wanted[4] = {70, 45, 14, 28};
+    printf("\nTesting closestCity function. Location is %d\n\n", closestCityGame(gv, 50, wanted, 4));
     
     // ---------------------------------
     
