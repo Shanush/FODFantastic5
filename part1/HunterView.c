@@ -111,3 +111,10 @@ LocationID *whereCanTheyGo(HunterView currentView, int *numLocations,
                               getLocation(currentView->gV, player),
                               player, getRound(currentView->gV), road, rail, sea);
 }
+
+LocationID closestCityHunter(HunterView currentView, LocationID targetLocation,
+                       LocationID *cities, int citiesSize) {
+    
+    return closestCityGame(currentView->gV, targetLocation, cities, citiesSize);
+    
+}

@@ -44,4 +44,6 @@ LocationID* connLocs (Map g, int *numLocations,
                                LocationID from, PlayerID player, Round round,
                                int road, int rail, int sea);
 
+LocationID closestCity(Map g, LocationID targetLocation, LocationID *cities, int citiesSize);
+
 #endif

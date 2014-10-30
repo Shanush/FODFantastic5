@@ -442,3 +442,11 @@ void reduceHealthIfAtSea (player *currentPlayer) {
         currentPlayer->health -= LIFE_LOSS_SEA;
     }
 }
+
+LocationID closestCityGame(GameView currentView, LocationID targetLocation,
+                       LocationID *cities, int citiesSize) {
+    
+    return closestCity(currentView->europe, targetLocation, cities, citiesSize);
+
+}
+

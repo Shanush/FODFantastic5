@@ -95,12 +95,14 @@ LocationID bestLocationToMoveTo (HunterView gameState) {
     
     LocationID lastLocOfDracula = lastLocationOfDracula(gameState);
     
-    if (lastLocOfDracula == UNKNOWN_LOCATION) {
+    LocationID *possibleLocations;
+    int numPossibleLocations;
     
-        LocationID *possibleLocations;
-        int numPossibleLocations;
-        
-        possibleLocations = whereCanIgo(gameState, &numPossibleLocations, TRUE, TRUE, TRUE);
+    possibleLocations = whereCanIgo(gameState, &numPossibleLocations, TRUE, TRUE, TRUE);
+    
+    LocationID locationToGo;
+    
+    if (lastLocOfDracula == UNKNOWN_LOCATION) {
         
         int randomPosition = rand()%numPossibleLocations;
         
@@ -110,21 +112,20 @@ LocationID bestLocationToMoveTo (HunterView gameState) {
             randomPosition--;
         }
         
-        LocationID locationToGo = possibleLocations[randomPosition];
-        
-        return locationToGo;
+        locationToGo = possibleLocations[randomPosition];
     
+    } else if (lastLocOfDracula < 71) { //I.e. its a valid place
+        locationToGo = closestCityHunter(gameState, lastLocOfDracula,
+                                         possibleLocations, numPossibleLocations);
     }
     
-    return UNKNOWN_LOCATION;
-    
-
+    return locationToGo;
 }
 
 LocationID lastLocationOfDracula(HunterView gameState) {
     
     
-    /*LocationID draculaTrail[TRAIL_SIZE] = {0};
+    LocationID draculaTrail[TRAIL_SIZE] = {0};
     giveMeTheTrail(gameState, PLAYER_DRACULA, draculaTrail);
     
     int i;
@@ -133,7 +134,7 @@ LocationID lastLocationOfDracula(HunterView gameState) {
             return draculaTrail[i];
         }
     }
-    */
+    
     
     return UNKNOWN_LOCATION;
     
