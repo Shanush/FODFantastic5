@@ -28,6 +28,10 @@
 #include "Map.h"
 #include "Places.h"
 #include "List.h"
+#include "Queue.h"
+
+#define FALSE 0
+#define TRUE 1
 
 typedef struct vNode *VList;
 
@@ -46,6 +50,8 @@ struct MapRep {
 
 static void addConnections(Map);
 static List findRailConnections(Map g, LocationID from, int possibleRailDist, int *visited);
+Edge asSingleVertex(LocationID vertex);
+int interestCity(LocationID currCity, LocationID *cities, int numCities)
 
 // Create a new empty graph (for a map)
 // #Vertices always same as NUM_PLACES
@@ -282,6 +288,78 @@ static List findRailConnections(Map g, LocationID from,
         return NULL;
         
     }
+}
+
+
+LocationID closestCity(Map g, LocationID target, LocationID *cities, int numCities) {
+    if (interestCity(target, cities, numCities) == TRUE) {
+        return target;
+    }
+    
+    // Make array for all cities
+    int viewed[g->nV];
+    int i = 0;
+    for (i = 0; i < g->nV; i++) {
+        viewed[i] = -1;
+    }
+    viewed[target] = target;
+        /*
+         // Breadth first search from start using queue until find destination
+         int parent[g->nV];
+         // init array
+         for (int i = 0; i<g->nV; i++) {
+            parent[i] = -1;
+         }
+         // start point to nowhere/itself
+         parent[start] = start;
+         */
+    
+    // Make queue for BFS
+    Queue searching = newQueue();
+    Edge currParent = asSingleVertex(target);
+    QueueJoin(searching, currParent);
+    VList currEdge;
+    int reachedFinish = FALSE;
+    LocationID closestCity = -1;
+    
+    // BFS from target
+    while(!QueueIsEmpty(searching) && !reachedFinish) {
+        currParent = QueueLeave(searching);
+        currEdge = g->connections[currParent.start];
+        
+        while(currEdge != NULL && !reachedFinish) {
+            // If not observed previously, add to queue
+            if(viewed[currEdge->v] == -1) {
+                QueueJoin(searching, asSingleVertex(currEdge->v));
+                viewed[currEdge->v] = currParent.start;
+                
+                // If city is a destination
+                if(interestCity(currEdge->v, cities, numCities) == TRUE) {
+                    reachedFinish = TRUE;
+                    closestCity = currEdge->v;
+                }
+            }
+            // move to next path in list
+            currEdge = currEdge->next;
+        }
+    }
+    return closestCity;
+}
+
+int interestCity(LocationID currCity, LocationID *cities, int numCities) {
+    int i = 0;
+    int match = FALSE;
+    for (i = 0; i < numCities; i++) {
+        if (currCity == cities[i]) {
+            match = TRUE;
+        }
+    }
+    return match;
+}
+
+Edge asSingleVertex(LocationID vertex) {
+    Edge wrapper = {vertex, vertex, ROAD};
+    return wrapper;
 }
 
 // Add edges to Graph representing map of Europe

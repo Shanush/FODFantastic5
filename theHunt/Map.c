@@ -161,6 +161,7 @@ int  getDist(Map g, TransportID t, LocationID a, LocationID b) {
     return g->adjmat[t][a][b];
 }
 
+
 // Add edges to Graph representing map of Europe
 static void addConnections(Map g)
 {
