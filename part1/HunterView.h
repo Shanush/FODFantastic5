@@ -113,4 +113,7 @@ LocationID *whereCanTheyGo(HunterView currentView, int *numLocations,
                            PlayerID player, int road, int rail, int sea);
 
 
+LocationID closestCityHunter(HunterView currentView, LocationID targetLocation,
+                       LocationID *cities, int citiesSize);
+
 #endif

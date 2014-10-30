@@ -130,4 +130,7 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
                                LocationID from, PlayerID player, Round round,
                                int road, int rail, int sea);
 
+LocationID closestCityGame(GameView currentView, LocationID targetLocation,
+                       LocationID *cities, int citiesSize);
+
 #endif
