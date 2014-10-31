@@ -80,7 +80,6 @@ void decideHunterMove(HunterView gameState)
         
         // Move to a random allowed location
         // Bacically a STUB
-        
         LocationID locationToGo = bestLocationToMoveTo(gameState);
         
         registerBestPlay(idToAbbrev(locationToGo) ,"I'm on holiday in Geneva");
@@ -98,12 +97,17 @@ LocationID bestLocationToMoveTo (HunterView gameState) {
     LocationID *possibleLocations;
     int numPossibleLocations;
     
+    
     possibleLocations = whereCanIgo(gameState, &numPossibleLocations, TRUE, TRUE, TRUE);
     
     LocationID locationToGo;
     
-    if (lastLocOfDracula == UNKNOWN_LOCATION) {
+    
+    if (lastLocOfDracula < 71) { //I.e. its a valid place
+        locationToGo = closestCityHunter(gameState, lastLocOfDracula,
+                                         possibleLocations, numPossibleLocations);
         
+    } else {
         int randomPosition = rand()%numPossibleLocations;
         
         if (randomPosition == 0) {
@@ -113,10 +117,8 @@ LocationID bestLocationToMoveTo (HunterView gameState) {
         }
         
         locationToGo = possibleLocations[randomPosition];
-    
-    } else if (lastLocOfDracula < 71) { //I.e. its a valid place
-        locationToGo = closestCityHunter(gameState, lastLocOfDracula,
-                                         possibleLocations, numPossibleLocations);
+        
+        
     }
     
     return locationToGo;

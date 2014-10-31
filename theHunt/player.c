@@ -29,7 +29,7 @@
 
 #include "Game.h"
 
-#define I_AM_DRACULA 1
+//#define I_AM_DRACULA 1
 
 #ifdef I_AM_DRACULA
 #include "DracView.h"
